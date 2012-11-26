@@ -23,6 +23,8 @@ SpaceGame.prototype.initCanvas = function(){
     this.body.height(window.innerHeight - 20);
     this.width = 480;
     this.height = 320;
+    this.backgroundImg = new Image();
+    this.backgroundImg.src = 'images/Space_bg2.gif';
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
     this.page = new ScaledPage(this.canvas, this.width);
 };
@@ -57,7 +59,7 @@ SpaceGame.prototype.draw = function(timeDiff){
 }
 
 SpaceGame.prototype.clearPage = function(){
-    this.page.fillRect(0, 0, this.width, this.height, '#eee');
+    this.page.drawBackground(this.backgroundImg, this.width, this.height);
 }
 
 SpaceGame.prototype.drawBall = function(timeDiff){

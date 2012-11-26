@@ -22,6 +22,9 @@ ScaledPage.prototype.canvasToPage = function(canvasX, canvasY) {
            };
 }
 
+ScaledPage.prototype.drawBackground = function(img, width, height){
+    this.page.drawImage(img, 0, 0, width*this.scale, height*this.scale);
+}
 
 ScaledPage.prototype.lineRect = function(x, y, width, height){
     this.page.strokeRect(x*this.scale, y*this.scale, width*this.scale,
@@ -50,5 +53,6 @@ ScaledPage.prototype.spaceShip = function(x, y, img){
     var dWidth = 32*this.scale;
     var dx = (x*this.scale);
     var dy = (y*this.scale);
+    //this.page.drawImage(img, dx, dy);
     this.page.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 }

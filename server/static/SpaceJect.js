@@ -4,7 +4,7 @@ battlefield, a mix of Space and Object. Cleverinorite. */
 var SpaceJect = function(config){
 	this.typeName = "SpaceJect";
 	this.img = new Image();
-	this.img.src = 'ships.gif'
+	this.img.src = 'images/ships.gif'
 
 }
 
