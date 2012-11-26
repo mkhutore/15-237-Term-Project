@@ -21,8 +21,8 @@ SpaceGame.prototype.initCanvas = function(){
     this.body = $(document.body);
     this.body.width(document.body.offsetWidth);
     this.body.height(window.innerHeight - 20);
-    this.width = 960;
-    this.height = 480;
+    this.width = 480;
+    this.height = 320;
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
     this.page = new ScaledPage(this.canvas, this.width);
 };
