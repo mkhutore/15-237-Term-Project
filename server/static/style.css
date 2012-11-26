@@ -1,7 +1,10 @@
 body {
 	background-image: url("images/space_bg.gif");
+	background-size: cover;
+	//background-repeat: no-repeat;
 	text-align: center;
 	padding-top: 150px;
+	padding-bottom: 150px;
 }
 
 .textBox {
