@@ -1,0 +1,28 @@
+body {
+	background-image: url("images/space_bg.gif");
+	text-align: center;
+	padding-top: 150px;
+}
+
+.textBox {
+	background-image: url("images/textbox.png");
+	font-size: 16px;
+	color: white;
+	border: solid 1px #4f5d9c;
+	opacity: .7;
+	padding: 4px;
+	border-radius: 3px;
+}
+
+input[type="submit"] {
+	background-image: url("images/button.png");
+	font-size: 16px;
+	color: #c3bfe1;
+	border: solid 1px #4f5d9c;
+	border-radius: 1px;
+	padding: 6px;
+	
+	-moz-box-shadow:    0px 0px 5px 0px black;
+	-webkit-box-shadow: 0px 0px 5px 0px black;
+	box-shadow:         0px 0px 5px 0px black;
+}
