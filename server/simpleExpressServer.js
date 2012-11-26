@@ -98,7 +98,7 @@ app.get("/success", function(request, response){
 });		
 					   
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/static/player.html',
+  passport.authenticate('local', { successRedirect: '/static/gameBoard.html',
                                    failureRedirect: '/static/login.html',
                                    failureFlash: true }));
 
