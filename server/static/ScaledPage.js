@@ -41,7 +41,7 @@ ScaledPage.prototype.fillCircle = function(x, y, radius, style){
     this.page.fill();
 }
 
-ScaledPage.prototype.spaceShip = function(x, y){
+ScaledPage.prototype.spaceShip = function(x, y, img){
     var sx = 4;
     var sy = 4;
     var sWidth = 58;
@@ -50,7 +50,5 @@ ScaledPage.prototype.spaceShip = function(x, y){
     var dWidth = 32*this.scale;
     var dx = (x*this.scale);
     var dy = (y*this.scale);
-    var img = new Image();
-    img.src = 'ships.gif';
     this.page.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 }
