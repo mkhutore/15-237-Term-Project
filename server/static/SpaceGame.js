@@ -12,6 +12,7 @@ SpaceGame.prototype.setup = function(){
     window.util.patchFnBind();
     this.initCanvas();
     TouchHandler.init(this);
+    //Mousehandler.init(this);
     this.initBall();
     this.initAccelerometer();
     this.initBattlefield();
@@ -26,8 +27,11 @@ SpaceGame.prototype.initCanvas = function(){
     this.backgroundImg = new Image();
     this.backgroundImg.src = 'images/Space_bg2.gif';
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
+    this.canvas.bind('click', function(event){
+    alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
+             + this.offsetLeft + ', ' + this.offsetTop);})
     this.page = new ScaledPage(this.canvas, this.width);
-};
+}
 
 SpaceGame.prototype.initBattlefield = function(){
     this.battlefield = new Battlefield({'width':this.width, 'height':this.height});
