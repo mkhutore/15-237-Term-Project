@@ -27,14 +27,25 @@ SpaceGame.prototype.initCanvas = function(){
     this.backgroundImg = new Image();
     this.backgroundImg.src = 'images/Space_bg2.gif';
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
-    this.canvas.bind('click', function(event){
-    alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
-             + this.offsetLeft + ', ' + this.offsetTop);})
+    this.pointed = new Pointed({'x':0,'y':0,'handled':true});
+    $(this.canvas).bind('click', this.onClick.bind(this));
     this.page = new ScaledPage(this.canvas, this.width);
 }
 
+
+SpaceGame.prototype.onClick = function(event){
+    coorX = event.pageX - $(this.canvas).offset().left;
+    coorY = event.pageY - $(this.canvas).offset().top;
+    this.pointed = new Pointed({'x': coorX, 'y': coorY, 'handled' : false});
+    console.log(this.pointed);
+    alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
+            + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
+            + this.pointed.x + ',' + this.pointed.y + ',' + this.pointed.handled);
+}
+
 SpaceGame.prototype.initBattlefield = function(){
-    this.battlefield = new Battlefield({'width':this.width, 'height':this.height});
+    this.battlefield = new Battlefield({'width':this.width,
+     'height':this.height});
 }
 
 SpaceGame.prototype.initBall = function(){
@@ -60,6 +71,7 @@ SpaceGame.prototype.draw = function(timeDiff){
     TouchHandler.drawBalls(timeDiff);
     this.updateBall();
     this.battlefield.draw(this.page);
+    console.log(this.pointed);
 }
 
 SpaceGame.prototype.clearPage = function(){
@@ -67,8 +79,8 @@ SpaceGame.prototype.clearPage = function(){
 }
 
 SpaceGame.prototype.drawBall = function(timeDiff){
-    this.ball.update(timeDiff);
-    this.ball.draw(this.page);
+    //this.ball.update(timeDiff);
+    //this.ball.draw(this.page);
 }
 
 SpaceGame.prototype.updateBall = function(){
