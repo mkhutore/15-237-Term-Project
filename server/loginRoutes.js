@@ -1,5 +1,6 @@
 var passport = require('passport');
 var User = require('./User');
+var Game = require("./Game");
 
 module.exports = function (app) {
     
@@ -8,7 +9,13 @@ module.exports = function (app) {
             res.sendfile('html/login.html');
         }
         else {
-            res.sendfile('html/chooseGame.html');
+			if(req.query.id === undefined)
+				res.sendfile('html/chooseGame.html');
+			else
+			{
+				res.cookie("id", req.query.id);
+				res.sendfile("html/gameBoard.html");
+			}
         }
     });
 

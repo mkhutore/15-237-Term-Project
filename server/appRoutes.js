@@ -28,8 +28,4 @@ module.exports = function (app) {
 	app.post("/user", function(req, res){
 		res.send(req.user.username);
 	});
-	
-	app.get('/startGame', function (req, res) {
-        res.sendfile('html/gameBoard.html');
-    });
 }

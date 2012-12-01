@@ -51,6 +51,13 @@ io.sockets.on('connection', function(socket){
 			io.sockets.emit("newGame", {"game": game});
 		}
 	});
+	
+	socket.on("startGame", function(data) {
+		Game.findOne({"_id": data.game}, function(err, game) {
+			console.log(game);
+			io.sockets.emit("setupGame", {"game": game});
+		});
+	});
 });
 
 //======================================

@@ -6,7 +6,7 @@ var App = function(){
     $('#newGame').onButtonTap(this.requestGame.bind(this));
 
 	this.table = $("#gameTable");
-	this.socket = io.connect('http://128.237.150.177:3000/');
+	this.socket = io.connect('http://localhost:3000/');
 	
 	this.setUser();
 	this.update();
@@ -55,7 +55,6 @@ App.prototype.setGames = function(games){
 
 App.prototype.appendGame = function(game){
     var row = $('<tr>');
-	row.attr("id", game._id);
 	
 	var lp = $("<td>");
 	lp.text(game.lastPlayedTimestamp);
@@ -63,7 +62,9 @@ App.prototype.appendGame = function(game){
 	var start = $("<td>");
 	var button = $("<button>");
 	button.text("Start");
-	button.onButtonTap(this.startGame);
+	button.onButtonTap(function(){
+		this.startGame(game._id)
+	}.bind(this));
 	start.append(button);
 	
 	var opp = $("<td>");
@@ -81,10 +82,9 @@ App.prototype.appendGame = function(game){
     this.table.append(row);
 }
 
-App.prototype.startGame = function(){
-	window.location = '/startGame';
-	/* var req = $.ajax({
-        url: '/startGame',
-        type: 'GET'});
-    req.done(); */
+App.prototype.startGame = function(id){
+	//window.location = "startGame/" + id; 
+	window.location = "/?id=" + id;
+	//console.log(id);
+	//this.socket.emit("startGame", {"game": id});
 }

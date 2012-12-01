@@ -5,7 +5,8 @@ var Game = new Schema({
     player1: String,
 	player2: String,
     startedTimestamp: Date,
-    lastPlayedTimestamp: Date
+    lastPlayedTimestamp: Date,
+	objects: []
 });
 
 module.exports = mongoose.model('Game', Game);
