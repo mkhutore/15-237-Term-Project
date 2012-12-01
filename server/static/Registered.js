@@ -4,15 +4,11 @@ var App = function(){
     });
 
     $('#newGame').onButtonTap(this.requestGame.bind(this));
-	$('#setMsg').onButtonTap(this.setMsg.bind(this));
-    $('#update').onButtonTap(this.update.bind(this));
 
-    this.msgsDiv = $('#msgs');
 	this.table = $("#gameTable");
-	this.socket = io.connect('http://localhost:3000/');
+	this.socket = io.connect('http://128.237.150.177:3000/');
 	
 	this.setUser();
-	
 	this.update();
 	
 	this.socket.on("newGame", function(data){
@@ -22,7 +18,7 @@ var App = function(){
 
 App.prototype.setUser = function(){
     var req = $.ajax({
-        url: '/db/user',
+        url: '/user',
         type: 'POST',
         data: {}});
     req.done(function(user){
@@ -31,25 +27,7 @@ App.prototype.setUser = function(){
 }
 
 App.prototype.requestGame = function(){
-    var req = $.ajax({
-        url: '/db/user',
-        type: 'POST',
-        data: {}});
-    req.done(this.sendRequest.bind(this));
-}
-
-App.prototype.sendRequest = function(user){
-	this.socket.emit("requestGame", {"user": user});
-}
-
-App.prototype.setMsg = function(){
-    var msg = $('#msg').val();
-    var req = $.ajax({
-        url: '/db/me/setMsg',
-        type: 'POST',
-        data: {'msg': msg}
-    });
-    req.done(this.update.bind(this));
+    this.socket.emit("requestGame", {"user": this.user});
 }
 
 App.prototype.update = function(){
@@ -65,6 +43,7 @@ App.prototype.update = function(){
 }
 
 App.prototype.setGames = function(games){
+	console.log(games);
     this.table.children().remove();
     var header = $('<tr>');
     header.html("<td><h3>Opponent</h3></td><td><h3>Last Played</h3></td>");
@@ -76,12 +55,15 @@ App.prototype.setGames = function(games){
 
 App.prototype.appendGame = function(game){
     var row = $('<tr>');
+	row.attr("id", game._id);
+	
 	var lp = $("<td>");
 	lp.text(game.lastPlayedTimestamp);
 	
 	var start = $("<td>");
 	var button = $("<button>");
 	button.text("Start");
+	button.onButtonTap(this.startGame);
 	start.append(button);
 	
 	var opp = $("<td>");
@@ -97,4 +79,12 @@ App.prototype.appendGame = function(game){
 	row.append(button);
 	
     this.table.append(row);
+}
+
+App.prototype.startGame = function(){
+	window.location = '/startGame';
+	/* var req = $.ajax({
+        url: '/startGame',
+        type: 'GET'});
+    req.done(); */
 }
