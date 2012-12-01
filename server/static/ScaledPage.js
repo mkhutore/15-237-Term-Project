@@ -44,7 +44,7 @@ ScaledPage.prototype.fillCircle = function(x, y, radius, style){
     this.page.fill();
 }
 
-ScaledPage.prototype.spaceShip = function(x, y, img){
+ScaledPage.prototype.spaceShip = function(x, y, img, sqLength){
     var sx = 4;
     var sy = 4;
     var sWidth = 58;
@@ -55,4 +55,5 @@ ScaledPage.prototype.spaceShip = function(x, y, img){
     var dy = (y*this.scale);
     //this.page.drawImage(img, dx, dy);
     this.page.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    return {'dx':dx, 'dy': dy, 'sqLength': sqLength*this.scale};
 }

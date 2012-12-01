@@ -12,8 +12,8 @@ SpaceGame.prototype.setup = function(){
     window.util.patchFnBind();
     this.initCanvas();
     TouchHandler.init(this);
-    //Mousehandler.init(this);
-    this.initBall();
+    this.initStatus();
+    this.initTextHandler();
     this.initAccelerometer();
     this.initBattlefield();
 }
@@ -32,28 +32,22 @@ SpaceGame.prototype.initCanvas = function(){
     this.page = new ScaledPage(this.canvas, this.width);
 }
 
-
-SpaceGame.prototype.onClick = function(event){
+SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current pointed
     coorX = event.pageX - $(this.canvas).offset().left;
     coorY = event.pageY - $(this.canvas).offset().top;
     this.pointed = new Pointed({'x': coorX, 'y': coorY, 'handled' : false});
+    this.TextHandler.readSingleFile();
     console.log(this.pointed);
     alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
             + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
             + this.pointed.x + ',' + this.pointed.y + ',' + this.pointed.handled);
 }
 
+SpaceGame.prototype.initStatus = function(){
+}
 SpaceGame.prototype.initBattlefield = function(){
     this.battlefield = new Battlefield({'width':this.width,
      'height':this.height});
-}
-
-SpaceGame.prototype.initBall = function(){
-    this.ball = new Ball({'x': this.width/2, 'y': this.height/2,
-                            'radius': 20,
-                            'maxX': this.width, 'maxY': this.height});
-    this.ball.velx = 5;
-    this.ball.vely = 5;
 }
 
 SpaceGame.prototype.initAccelerometer = function(){
@@ -61,31 +55,32 @@ SpaceGame.prototype.initAccelerometer = function(){
     this.accelerometer.startListening();
 }
 
+SpaceGame.prototype.initTextHandler = function(){
+    this.TextHandler = new TextHandler();
+}
+
+
 //==============================================
 //DRAWING
 //==============================================
 
 SpaceGame.prototype.draw = function(timeDiff){
     this.clearPage();
-    this.drawBall(timeDiff);
-    TouchHandler.drawBalls(timeDiff);
-    this.updateBall();
+    this.updateBattlefield();
     this.battlefield.draw(this.page);
-    console.log(this.pointed);
 }
 
 SpaceGame.prototype.clearPage = function(){
-    this.page.drawBackground(this.backgroundImg, this.width, this.height);
+    this.page.drawBackground(this.backgroundImg, this.width,
+     this.height);
 }
 
-SpaceGame.prototype.drawBall = function(timeDiff){
-    //this.ball.update(timeDiff);
-    //this.ball.draw(this.page);
+SpaceGame.prototype.updateBattlefield = function(){
+    if(this.pointed.handled === false){
+        this.handlePointer();
+    }
 }
 
-SpaceGame.prototype.updateBall = function(){
-    var lastAcceleration = this.accelerometer.getLast();
-    this.ball.velx += lastAcceleration.x/8;
-    this.ball.vely += lastAcceleration.y/8;
+SpaceGame.prototype.handlePointer = function(){
 
 }

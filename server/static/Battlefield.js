@@ -6,8 +6,10 @@ var Battlefield = function(config){
 	this.fieldRows = this.width/this.sqLength;
 	this.fieldCols = this.height/this.sqLength;
 	this.fieldData = this.createField();
+	this.spacejectList = [];
 	this.initField();
 	console.log(this.fieldData[0]);
+	this.testcounter = true;
 }
 
 Battlefield.prototype.createField = function(){
@@ -28,11 +30,15 @@ Battlefield.prototype.initField = function(){
 }
 
 Battlefield.prototype.initCaptains = function(){
-	this.fieldData[0][this.gridVal/2] = new SpaceJect({});
-	this.fieldData[this.fieldRows-1][this.gridVal/2] = new SpaceJect({});
-	console.log(this.fieldData[0][this.gridVal/2].typeName);
-	console.log(this.fieldData[this.fieldRows-1][this.gridVal/2].typeName);
+	var shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2}
+	var shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2}
+	this.fieldData[0][this.gridVal/2] = new Ship(shipone);
+	this.spacejectList.push(this.fieldData[0][this.gridVal/2])
+	this.fieldData[this.fieldRows-1][this.gridVal/2] = 
+	new Ship(shiptwo);
+	this.spacejectList.push(this.fieldData[this.fieldRows-1][this.gridVal/2])
 }
+
 
 Battlefield.prototype.draw = function(scaledPage){
 	for (i=0;i<this.fieldRows;i++)
@@ -44,7 +50,11 @@ Battlefield.prototype.draw = function(scaledPage){
 			scaledPage.lineRect(currentX, currentY, this.sqLength, this.sqLength);
 			if (this.fieldData[i][j].typeName === "SpaceJect")
 			{
-				this.fieldData[i][j].draw(scaledPage, currentX, currentY);
+				this.fieldData[i][j].draw(scaledPage, currentX, currentY, this.sqLength);
+				if(this.testcounter){
+					console.log(this.fieldData[i][j].dimensions);
+					this.testcounter = false;
+				}
 			}
 		}
 	}

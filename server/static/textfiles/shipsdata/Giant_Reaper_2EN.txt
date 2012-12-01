@@ -1,0 +1,13 @@
+Giant Reaper 2EN
+Knight
+Bulky
+200
+Max Cannon; Rockets; Twin Barrels; Laser Axe; Harness Shield;
+4
+50
+15
+None
+None
+4
+False
+/images/ships.gif
