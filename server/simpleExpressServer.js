@@ -38,7 +38,7 @@ io.sockets.on('connection', function(socket){
 	});
 	
 	socket.on("requestGame", function(data) {
-		if(data.user != "none" /*&& requests.lastIndexOf(data.user) == -1*/) requests.push(data.user);
+		if(data.user != "none" && requests.lastIndexOf(data.user) == -1) requests.push(data.user);
 		console.log(requests);
 		if(requests.length >= 2) {
 			console.log("Make new game");

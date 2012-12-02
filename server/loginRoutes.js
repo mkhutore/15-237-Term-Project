@@ -14,6 +14,7 @@ module.exports = function (app) {
 			else
 			{
 				res.cookie("id", req.query.id);
+				res.cookie("user", req.user.username);
 				res.sendfile("html/gameBoard.html");
 			}
         }
