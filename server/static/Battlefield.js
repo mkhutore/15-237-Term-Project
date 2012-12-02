@@ -39,6 +39,9 @@ Battlefield.prototype.initCaptains = function(){
 	this.spacejectList.push(this.fieldData[this.fieldRows-1][this.gridVal/2])
 }
 
+Battlefield.prototype.createShip = function(bx, by){
+	this.fieldData[bx][by] = new Ship({'gridXLocation': bx, 'gridYLocation': by})
+}
 
 Battlefield.prototype.draw = function(scaledPage){
 	for (i=0;i<this.fieldRows;i++)

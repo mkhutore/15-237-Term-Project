@@ -3,6 +3,7 @@ this covers the basics of both */
 
 var Ship = function(config){
 	SpaceJect.call(this, config);
+	if (config !== undefined){
 	this.shipName = config.shipName;
 	this.faction = config.faction;
 	this.shipClass = config.shipClass;
@@ -22,6 +23,7 @@ var Ship = function(config){
 	this.moved = 0;
 	this.CMAA = config.CMAA //can move after attack, boolean
 	this.imgurl = config.imgurl;
+}
 }
 
 	Ship.prototype = new SpaceJect();

@@ -5,7 +5,7 @@ var SpaceJect = function(config){
 		this.typeName = "SpaceJect";
 		this.img = new Image();
 		this.img.src = 'images/ships.gif'
-		console.log('config=', config, 'width=', this.img.width);
+		//console.log('config=', config, 'width=', this.img.width);
 		this.isDrawn = false;
 	if(config !== undefined){
 		this.gridXLocation = config.gridXLocation;

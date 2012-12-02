@@ -1,0 +1,4 @@
+Button Name
+Button Display
+Button Image (possibly image 1, then image 2 for depressed button)
+Status to (which status it goes to)

@@ -12,10 +12,11 @@ SpaceGame.prototype.setup = function(){
     window.util.patchFnBind();
     this.initCanvas();
     TouchHandler.init(this);
-    this.initStatus();
     this.initTextHandler();
     this.initAccelerometer();
     this.initBattlefield();
+    this.draw();
+    this.initStatus();
 }
 
 SpaceGame.prototype.initCanvas = function(){
@@ -44,6 +45,9 @@ SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current 
 }
 
 SpaceGame.prototype.initStatus = function(){
+    this.currentStatus = new gameStatus('FieldView', this.battlefield);
+    console.log('status:', this.currentStatus.clickables[0].dimensions)
+
 }
 SpaceGame.prototype.initBattlefield = function(){
     this.battlefield = new Battlefield({'width':this.width,
@@ -82,5 +86,13 @@ SpaceGame.prototype.updateBattlefield = function(){
 }
 
 SpaceGame.prototype.handlePointer = function(){
-
+    clickables = this.currentStatus.clickables;
+    cx = this.pointed.x;
+    cy = this.pointed.y;
+    for(i=0;i<clickables.length;i++){
+        if (clickables[i].clickCheck(cx, cy)){
+            this.battlefield.createShip(0, 0);
+        }
+    }
+    this.pointed.handled = true;
 }
