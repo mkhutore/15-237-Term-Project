@@ -17,6 +17,30 @@ module.exports = function (app) {
             });
         }
     });
+	
+	app.post('/db/game', function(req, res){
+        if (!req.user){
+            res.status(401);
+        }
+        else {
+            Game.findOne({"_id" : req.body.id}, 'player1 player2 objects', 
+                function(err, game){
+                    if (err)
+                        res.send(err);
+                    else if(game)
+					{
+						game.lastPlayedTimestamp = new Date();
+						game.save(function(err){
+							console.log("saving");
+						    if (err) {
+								return res.send({'err': err});
+							}
+							res.send(game);
+						});
+					}
+            });
+        }
+    });
 
     app.post('/db/me/setMsg', function(req, res){
         req.user.msg = req.body.msg;

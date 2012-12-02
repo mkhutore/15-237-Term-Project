@@ -57,6 +57,7 @@ App.prototype.appendGame = function(game){
     var row = $('<tr>');
 	
 	var lp = $("<td>");
+	console.log(game.lastPlayedTimestamp);
 	lp.text(game.lastPlayedTimestamp);
 	
 	var start = $("<td>");

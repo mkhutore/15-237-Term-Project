@@ -6,8 +6,11 @@ var Battlefield = function(config){
 	this.fieldRows = this.width/this.sqLength;
 	this.fieldCols = this.height/this.sqLength;
 	this.fieldData = this.createField();
-	this.spacejectList = [];
-	this.initField();
+	this.spacejectList = config.spacejects;
+	if(this.spacejectList.length === 0)
+	{
+		this.initField();
+	}
 	console.log(this.fieldData[0]);
 	this.testcounter = true;
 }
