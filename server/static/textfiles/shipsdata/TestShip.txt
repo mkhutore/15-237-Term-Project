@@ -1,0 +1,13 @@
+Test Ship
+Knight
+Bulky
+200
+MaxCannon
+4
+50
+15
+None
+None
+4
+False
+/images/ships.gif

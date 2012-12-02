@@ -43,7 +43,14 @@ Battlefield.prototype.initCaptains = function(){
 }
 
 Battlefield.prototype.createShip = function(bx, by){
-	this.fieldData[bx][by] = new Ship({'gridXLocation': bx, 'gridYLocation': by})
+	file = '/textfiles/shipsdata/TestShip.txt';
+	baseConfig = {'gridXLocation' : bx, 'gridYLocation': by,
+		'textType' : "Ship", 'file' : file};
+	this.shipHandler = new TextHandler(file);
+	console.log(this.shipHandler);
+	this.shipConfig = this.shipHandler.createShipConfig(baseConfig);
+	this.fieldData[bx][by] = new Ship(this.shipConfig);
+	//shipConfig = shipHandler.createShipConfig(baseConfig);
 }
 
 Battlefield.prototype.draw = function(scaledPage){

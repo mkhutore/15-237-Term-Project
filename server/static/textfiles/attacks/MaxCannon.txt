@@ -1,0 +1,6 @@
+Max Cannon
+60
+20
+None
+None
+Square:2

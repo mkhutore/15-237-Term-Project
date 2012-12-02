@@ -3,9 +3,7 @@ var SpaceGame = function(){
     window.util.deltaTimeRequestAnimationFrame(this.draw.bind(this));
 }
 
-//==============================================
 //SETUP
-//==============================================
 
 SpaceGame.prototype.setup = function(){
     window.util.patchRequestAnimationFrame();
@@ -14,7 +12,7 @@ SpaceGame.prototype.setup = function(){
 	this.getData();
     this.initCanvas();
     TouchHandler.init(this);
-    this.initTextHandler();
+    //this.initTextHandler();
     this.initAccelerometer();
 }
 
@@ -77,7 +75,7 @@ SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current 
     coorX = event.pageX - $(this.canvas).offset().left;
     coorY = event.pageY - $(this.canvas).offset().top;
     this.pointed = new Pointed({'x': coorX, 'y': coorY, 'handled' : false});
-    this.TextHandler.readSingleFile();
+    //this.TextHandler.readSingleFile();
     console.log(this.pointed);
     alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
             + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
@@ -90,7 +88,7 @@ SpaceGame.prototype.initAccelerometer = function(){
 }
 
 SpaceGame.prototype.initTextHandler = function(){
-    this.TextHandler = new TextHandler();
+    this.TextHandler = new TextHandler('asdf.txt');
 }
 
 
