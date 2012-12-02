@@ -8,7 +8,7 @@ module.exports = function (app) {
             res.status(401);
         }
         else {
-            Game.find({$or: [{"player1" : req.user.username}, {"player2" : req.user.username}]}, 'player1 player2', 
+            Game.find({$or: [{"player1" : req.user.username}, {"player2" : req.user.username}]}, 'player1 player2 lastPlayedTimestamp', 
                 function(err, games){
                     if (err)
                         res.send(err);
