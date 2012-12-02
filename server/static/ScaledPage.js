@@ -54,6 +54,7 @@ ScaledPage.prototype.spaceShip = function(x, y, img, sqLength){
     var dx = (x*this.scale);
     var dy = (y*this.scale);
     //this.page.drawImage(img, dx, dy);
+    sqLength = sqLength * this.scale
     this.page.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-    return {'dx':dx, 'dy': dy, 'sqLength': sqLength*this.scale};
+    return {'dx':dx, 'dy': dy, 'xLength': sqLength, 'yLength': sqLength};
 }
