@@ -1,0 +1,6 @@
+Attack Name
+Attack Power (int)
+Attack Breaking Power (int)
+Status Effects (list separated by ;)
+Elemental Affinity (list separated by ;)
+Range (list separated by ; and further by :, example: "Line:4;Square:2"

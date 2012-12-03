@@ -7,23 +7,19 @@ var TouchHandler = (function() {
     var touchBalls = {};
     var page;
     exports.init = function(app) {
-        var radius = 20;
         var canvas = app.canvas[0];
         page = app.page;
-
         function onTouchStart(e) {
-            var i, ballConfig, touch, ballLocation;
-            e.preventDefault();
+            var i, touchConfig, touch, touchLocation;
+            //e.preventDefault();
             for (i = 0; i < e.changedTouches.length; i++) {
                 touch = e.changedTouches[i];
-                ballLocation = page.pageToCanvas(touch.pageX, touch.pageY);
-                ballConfig = {'x': ballLocation.x,
-                              'y': ballLocation.y,
-                              'radius': radius,
-                              'maxX': app.width,
-                              'maxY': app.height,
-                              'style': 'red'};
-                touchBalls[touch.identifier] = new Ball(ballConfig);
+                touchLocation = page.pageToCanvas(touch.pageX, touch.pageY);
+                touchConfig = {'x': touchLocation.x,
+                              'y': touchLocation.y
+                                };
+                //alert('about to touchconfig', touchLocation.x, touchLocation.y);
+                //alert('touchConfig=', touchConfig.x, touchConfig.y);
             }
         }
 
@@ -51,7 +47,6 @@ var TouchHandler = (function() {
                 delete touchBalls[touch.identifier];
             }
         }
-
         canvas.addEventListener('touchstart', onTouchStart);
         canvas.addEventListener('touchmove', onTouchMove);
         canvas.addEventListener('touchend', onTouchEnd);
