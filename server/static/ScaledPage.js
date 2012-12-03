@@ -26,6 +26,14 @@ ScaledPage.prototype.drawBackground = function(img, width, height){
     this.page.drawImage(img, 0, 0, width*this.scale, height*this.scale);
 }
 
+ScaledPage.prototype.drawStatus = function(status){ //this is a test function!
+    this.page.font = "60px Arial";
+    this.page.textAlign = "center";
+    this.page.fillStyle = "white";
+    this.page.fillText(status, this.canvas.width()/2, 100);
+
+}
+
 ScaledPage.prototype.lineRect = function(x, y, width, height){
     this.page.strokeRect(x*this.scale, y*this.scale, width*this.scale,
                              height*this.scale);
@@ -45,16 +53,16 @@ ScaledPage.prototype.fillCircle = function(x, y, radius, style){
 }
 
 ScaledPage.prototype.spaceShip = function(x, y, img, sqLength){
-    var sx = 4;
-    var sy = 4;
-    var sWidth = 58;
-    var sHeight = 58;
+    //var sx = 4;
+    //var sy = 4;
+    //var sWidth = 58;
+    //var sHeight = 58;
     var dHeight = 32*this.scale;
     var dWidth = 32*this.scale;
     var dx = (x*this.scale);
     var dy = (y*this.scale);
     //this.page.drawImage(img, dx, dy);
-    sqLength = sqLength * this.scale
-    this.page.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    var sqLength = sqLength * this.scale
+    this.page.drawImage(img, dx, dy, dWidth, dHeight);
     return {'dx':dx, 'dy': dy, 'xLength': sqLength, 'yLength': sqLength};
 }

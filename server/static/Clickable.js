@@ -1,8 +1,14 @@
-var Clickable = function(clickedObject){
+var Clickable = function(clickedObject, SPEH){
 	this.dimensions = clickedObject.dimensions;
 	this.dimensions.dxf = this.dimensions.dx + this.dimensions.xLength;
 	this.dimensions.dyf = this.dimensions.dy + this.dimensions.yLength;
 	this.typeName = clickedObject.typeName;
+	if(clickedObject.toStatus === undefined){
+		this.toStatus = SPEH;
+	}
+	else{
+		this.toStatus = clickedObject.toStatus;
+	}
 }
 
 Clickable.prototype.clickCheck = function(cx, cy){
@@ -15,9 +21,8 @@ Clickable.prototype.clickCheck = function(cx, cy){
 }
 
 Clickable.prototype.withinX = function(cx){
-	dx = this.dimensions.dx;
-	dxf = this.dimensions.dxf;
-	console.log()
+	var dx = this.dimensions.dx;
+	var dxf = this.dimensions.dxf;
 	if((dx < cx) && (dxf > cx)){
 		return true;
 	}
@@ -27,8 +32,8 @@ Clickable.prototype.withinX = function(cx){
 }
 
 Clickable.prototype.withinY = function(cy){
-	dy = this.dimensions.dy;
-	dyf = this.dimensions.dyf;
+	var dy = this.dimensions.dy;
+	var dyf = this.dimensions.dyf;
 	if((dy < cy) && (dyf > cy)){
 		return true;
 	}

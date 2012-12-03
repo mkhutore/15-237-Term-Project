@@ -12,7 +12,6 @@ SpaceGame.prototype.setup = function(){
 	this.getData();
     this.initCanvas();
     TouchHandler.init(this);
-    //this.initTextHandler();
     this.initAccelerometer();
 }
 
@@ -52,8 +51,6 @@ SpaceGame.prototype.initBattlefield = function(objects){
 
 SpaceGame.prototype.initStatus = function(){
     this.currentStatus = new gameStatus('FieldView', this.battlefield);
-	console.log(this.currentStatus);
-    console.log('status:', this.currentStatus.clickables[0].dimensions)
 
 }
 
@@ -61,22 +58,24 @@ SpaceGame.prototype.initCanvas = function(){
     this.body = $(document.body);
     this.body.width(document.body.offsetWidth);
     this.body.height(window.innerHeight - 20);
-    this.width = 480;
+    this.width = 720;
     this.height = 320;
     this.backgroundImg = new Image();
     this.backgroundImg.src = 'images/Space_bg2.gif';
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
-    this.pointed = new Pointed({'x':0,'y':0,'handled':true});
-    $(this.canvas).bind('click', this.onClick.bind(this));
+    this.pointed = new Pointed({'x':0,'y':0,'handled':true, 'pointType':'None'});
+    if(!window.util.isIOS() && !window.util.isAndroid())
+        {
+            $(this.canvas).bind('click', this.onClick.bind(this));
+        }
     this.page = new ScaledPage(this.canvas, this.width);
 }
 
 SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current pointed
     coorX = event.pageX - $(this.canvas).offset().left;
     coorY = event.pageY - $(this.canvas).offset().top;
-    this.pointed = new Pointed({'x': coorX, 'y': coorY, 'handled' : false});
-    //this.TextHandler.readSingleFile();
-    console.log(this.pointed);
+    this.pointed = new Pointed({'x': coorX, 'y': coorY, 'handled' : false,
+        'pointType' : 'click'});
     alert('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
             + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
             + this.pointed.x + ',' + this.pointed.y + ',' + this.pointed.handled);
@@ -85,10 +84,6 @@ SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current 
 SpaceGame.prototype.initAccelerometer = function(){
     this.accelerometer = new Accelerometer();
     this.accelerometer.startListening();
-}
-
-SpaceGame.prototype.initTextHandler = function(){
-    this.TextHandler = new TextHandler('asdf.txt');
 }
 
 
@@ -101,7 +96,14 @@ SpaceGame.prototype.draw = function(timeDiff){
 	{
 		this.clearPage();
 		this.updateBattlefield();
-		this.battlefield.draw(this.page);
+        var currentStatus;
+        if(this.currentStatus !== undefined){
+            currentStatus = this.currentStatus.statusType;
+        }
+        else{
+            currentStatus = "FieldView";
+        }
+		this.battlefield.draw(this.page, currentStatus);
 	}
 }
 
@@ -117,13 +119,24 @@ SpaceGame.prototype.updateBattlefield = function(){
 }
 
 SpaceGame.prototype.handlePointer = function(){
-    clickables = this.currentStatus.clickables;
+    var clickables = this.currentStatus.clickables.slice(0);
     cx = this.pointed.x;
     cy = this.pointed.y;
+    var unchanged = true;
+    var i;
     for(i=0;i<clickables.length;i++){
         if (clickables[i].clickCheck(cx, cy)){
-            this.battlefield.createShip(0, 0);
+            var currentScale = this.page.scale;
+            var statusType = clickables[i].toStatus;
+            this.battlefield.createShip(0, 0, currentScale);
+            this.currentStatus = new gameStatus(statusType,
+                this.battlefield); 
+            unchanged = false;
         }
+    }
+    console.log(this.currentStatus.clickables);
+    if(unchanged === true){
+        this.currentStatus = new gameStatus('FieldView', this.battlefield);
     }
     this.pointed.handled = true;
 }

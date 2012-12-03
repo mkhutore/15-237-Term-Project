@@ -23,6 +23,10 @@ var Ship = function(config){
 		this.moved = 0;
 		this.CMAA = config.CMAA //can move after attack, boolean
 		this.imgurl = config.imgurl;
+		this.img = new Image();
+		this.img.src = this.imgurl;
+		this.cost = config.cost;
+		this.toStatus = this.shipClass;
 	}
 }
 

@@ -1,0 +1,19 @@
+Test Captain 2
+Knight
+Captain
+200
+MaxCannon
+4
+50
+15
+None
+None
+4
+False
+/images/Spaceships/BattleshipB.png
+0
+100
+20
+TestShip
+3
+Captain.txt

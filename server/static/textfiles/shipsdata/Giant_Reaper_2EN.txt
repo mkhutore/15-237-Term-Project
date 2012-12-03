@@ -11,3 +11,5 @@ None
 4
 False
 /images/ships.gif
+40
+Ship.txt

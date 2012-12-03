@@ -6,4 +6,5 @@ var Pointed = function(config){
 	this.x = config.x; //where the 
 	this.y = config.y;
 	this.handled = config.handled;
+	this.pointType = config.pointType;
 }
