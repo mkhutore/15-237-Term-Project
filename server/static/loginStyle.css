@@ -20,7 +20,8 @@ body {
 table {
 	position: relative;
 	margin: auto;
-	width: 300px;
+	//width: 300px;
+	width: 70%;
 	padding: 5px;
 	border: solid 3px #c3bfe1;
 	border-radius: 5px;
@@ -45,4 +46,19 @@ button {
 button:active {
 	position: relative;
 	top: 1px;
+}
+
+button[disabled="disabled"], button[disabled="disabled"]:active {
+	position: static;
+	background-image: url("/images/button-disabled.png");
+	font-size: 16px;
+	//color: #9095c6;
+	color: #9095c6;
+	border: solid 1px #4f5d9c;
+	border-radius: 1px;
+	padding: 6px;
+	
+	-moz-box-shadow:    0px 0px 1px 0px black;
+	-webkit-box-shadow: 0px 0px 1px 0px black;
+	box-shadow:         0px 0px 1px 0px black;
 }

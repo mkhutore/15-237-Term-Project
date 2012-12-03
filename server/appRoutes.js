@@ -9,7 +9,8 @@ module.exports = function (app) {
         }
         else {
             Game.find({$or: [{"player1" : req.user.username}, {"player2" : req.user.username}]}, 'player1 player2 lastPlayedTimestamp', 
-                function(err, games){
+                {sort:[['lastPlayedTimestamp',-1]]},
+				function(err, games){
                     if (err)
                         res.send(err);
                     else

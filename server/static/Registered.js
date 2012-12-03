@@ -12,7 +12,11 @@ var App = function(){
 	this.update();
 	
 	this.socket.on("newGame", function(data){
-		if(data.game.player1 === this.user || data.game.player2 === this.user) this.update();
+		if(data.game.player1 === this.user || data.game.player2 === this.user)
+		{
+			$("#newGame").removeAttr("disabled");
+			this.update();
+		}
 	}.bind(this));
 }
 
@@ -27,6 +31,18 @@ App.prototype.setUser = function(){
 }
 
 App.prototype.requestGame = function(){
+	$("#newGame").attr("disabled", "disabled");
+
+	var newGame = $("<tr>");
+	newGame.append($("<td>Waiting...</td>"));
+	newGame.append($("<td></td>"));
+	var button = $("<button>");
+	button.attr("disabled", "disabled");
+	button.text("Start");
+	newGame.append($("<td>").append(button));
+	
+	this.table.append(newGame);
+
     this.socket.emit("requestGame", {"user": this.user});
 }
 
@@ -57,8 +73,14 @@ App.prototype.appendGame = function(game){
     var row = $('<tr>');
 	
 	var lp = $("<td>");
-	var date = new Date(game.lastPlayedTimestamp);
-	lp.text(date.toString());
+	
+	if(game.lastPlayedTimestamp === undefined)
+		lp.text("");
+	else
+	{
+		var date = new Date(game.lastPlayedTimestamp);
+		lp.text(date.toDateString() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+	}
 	
 	var start = $("<td>");
 	var button = $("<button>");
