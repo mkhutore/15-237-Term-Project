@@ -1,4 +1,9 @@
 Button Name
-Button Display
-Button Image (possibly image 1, then image 2 for depressed button)
-Status to (which status it goes to)
+Button x (relative to menu or canvas) (int)
+Button y (relative to menu or canvas) (int)
+Button length (relative to menu or canvas) (int)
+Button width (relative to menu or canvas) (int)
+Button type image or text ('image' or 'text')
+Button text or image urls, list or text(possibly image 1, then image 2 for depressed button)
+Button color (for default for images)
+Status Key (see statuskeys, fromstatus, tostatus, separated by ; and :)

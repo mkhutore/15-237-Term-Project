@@ -37,15 +37,16 @@ TextHandler.prototype.getStatusKey = function(file){
   directory = '/textfiles/statuskeys/'
   fileDirect = directory + file;
   this.keyHandler = new TextHandler(fileDirect);
-  return this.keyHandler.createKeyConfig();
+  return this.keyHandler.createKeyConfig(this.keyHandler.lines[0]);
 }
 
-TextHandler.prototype.createKeyConfig = function(){
-  var len, i, prekey, key;
-  len = this.lines.length;
+TextHandler.prototype.createKeyConfig = function(line){
+  var len, i, prekey, key, keyLines;
+  keyLines = line.split(';');
+  len = keyLines.length;
   key = {};
   for(i=0;i<len;i++){
-    prekey = this.lines[i].split(':');
+    prekey = keyLines[i].split(':');
     key[prekey[0]] = prekey[1]; //the prekey will always have two sections
   }
   return key;
@@ -77,7 +78,7 @@ TextHandler.prototype.createShipConfig = function(baseConfig){
       return config;
   }
   else{
-    return createCaptainConfig(config);
+    return this.createCaptainConfig(config);
   }
 }
 
@@ -126,4 +127,34 @@ TextHandler.prototype.createAttackConfig = function(){
     config.atkRange = atkRangeList;
   }
   return config;
+}
+
+TextHandler.prototype.createMenuConfig = function(){
+  var config;
+  config = {};
+  config.menuName = this.lines[0];
+  config.mx = parseInt(this.lines[1]); //menu x, y, width, height below
+  config.my = parseInt(this.lines[2]);
+  config.mW = parseInt(this.lines[3]);
+  config.mH = parseInt(this.lines[4]);
+  config.menuColor = this.lines[5];
+  return config;
+}
+TextHandler.prototype.createButtonConfig = function(){
+  var config;
+  config = {};
+  config.buttonName = this.lines[0];
+  config.dx = parseInt(this.lines[1]);
+  config.dy = parseInt(this.lines[2]);
+  config.bWidth = parseInt(this.lines[3]);
+  config.bHeight = parseInt(this.lines[4]);
+  config.altColor = this.lines[5];
+  config.displayText = this.lines[6];
+  config.bColor = this.lines[7];
+  config.statusKey = this.createKeyConfig(this.lines[8]);
+  return config;
+}
+
+TextHandler.prototype.createStatusConfig = function(){
+  
 }

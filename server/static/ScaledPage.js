@@ -34,6 +34,18 @@ ScaledPage.prototype.drawStatus = function(status){ //this is a test function!
 
 }
 
+ScaledPage.prototype.drawButtonText = function(x, y, width, height, text){
+    var font, fontSize, textX, textY;
+    fontSize = (((width + height)/2) * this.scale)/5;
+    font = fontSize.toString() + 'px Arial';
+    this.page.font = font;
+    this.page.textAlign = "center";
+    this.page.fillStyle = "black";
+    textX = ((2 * x) + width) / 2;
+    textY = ((1.5 * y) + height) / 1.5;
+    this.page.fillText(text, textX*this.scale, textY*this.scale);
+}
+
 ScaledPage.prototype.lineRect = function(x, y, width, height){
     this.page.strokeRect(x*this.scale, y*this.scale, width*this.scale,
                              height*this.scale);
@@ -41,7 +53,9 @@ ScaledPage.prototype.lineRect = function(x, y, width, height){
 
 ScaledPage.prototype.fillRect = function(x, y, width, height, style){
     this.page.fillStyle = style;
+    //console.log(width,height,style);
     this.page.fillRect(x * this.scale, y * this.scale, width * this.scale, height*this.scale);
+    //console.log("fillrectend");
 }
 
 ScaledPage.prototype.fillCircle = function(x, y, radius, style){

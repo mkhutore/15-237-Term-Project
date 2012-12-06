@@ -6,15 +6,37 @@ var Battlefield = function(config){
 	this.fieldRows = this.width/this.sqLength;
 	this.fieldCols = this.height/this.sqLength;
 	this.fieldData = this.createField();
-	this.spacejectList = config.spacejects;
+	this.spacejectList = [];
 	this.shipHandler;
-	if(this.spacejectList.length === 0)
+	if(config.spacejects.length === 0)
 	{
-		this.initField();
+		this.initField(config);
+	}
+	else{
+		this.buildField(config.spacejects);
 	}
 	this.testcounter = true;
 }
 
+Battlefield.prototype.buildField = function(){
+	var i, j, s, tempList, lenI, lenJ, lenS, tempJect;
+	tempList = config.spacejects.slice(0);
+	lenI = this.fieldData.length;
+	lenJ = this.fieldData[0].length;
+	for(i=0;i<lenI;i++){
+		for(j=0;j<lenJ;j++)
+		{
+			lenS = tempList.length;
+			for(s=lenS;s>0;s--){
+				if((tempList[s].gridXLocation === i) &&
+				 (tempList[s].gridYLocation === j)){
+					tempJect = tempList[s];
+					this.fieldData[i][j] = tempJect;
+				}
+			}
+		}
+	}
+}
 Battlefield.prototype.createField = function(){
 	var fieldData = Array(this.fieldRows);
 	var i;
@@ -30,8 +52,9 @@ Battlefield.prototype.createField = function(){
 	return fieldData;
 }
 
-Battlefield.prototype.initField = function(){
+Battlefield.prototype.initField = function(config){
 	this.initCaptains();
+	this.createShip(0, 0, config.scale);
 }
 
 Battlefield.prototype.initCaptains = function(){
@@ -51,6 +74,7 @@ Battlefield.prototype.initCaptains = function(){
 }
 
 Battlefield.prototype.createShip = function(bx, by, scale){
+	if(this.fieldData[bx][by] === 0){
 	var file = '/textfiles/shipsdata/TestShip.txt';
 	baseConfig = {'gridXLocation' : bx, 'gridYLocation': by,
 		'textType' : "Ship", 'file' : file, 'scale' : scale,
@@ -60,6 +84,7 @@ Battlefield.prototype.createShip = function(bx, by, scale){
 	var newShip = new Ship(this.shipConfig);
 	this.fieldData[bx][by] = newShip;
 	this.spacejectList.push(newShip);
+}
 }
 
 
@@ -84,6 +109,6 @@ Battlefield.prototype.draw = function(scaledPage,status){
 		}
 	}
 		if(status === 'shipView'){
-			scaledPage.fillRect(100,100,200,150,'red');
+			//scaledPage.fillRect(100,100,200,150,'red');
 	}
 }

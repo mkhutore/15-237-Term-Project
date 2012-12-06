@@ -1,0 +1,3 @@
+SpacejectCheck (boolean: add SpaceJects if true, not if false)
+buttonlist (list of buttons as urls with ; as separator)
+menu url

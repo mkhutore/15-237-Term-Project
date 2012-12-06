@@ -5,14 +5,12 @@ var SpaceJect = function(config){
 		this.typeName = "SpaceJect";
 		this.img = new Image();
 		this.img.src = 'images/ships.gif'
-		//console.log('config=', config, 'width=', this.img.width);
 		this.isDrawn = false;
 	if(config !== undefined){ //most of this is gotten from not texthandler
 		this.gridXLocation = config.gridXLocation;
 		this.gridYLocation = config.gridYLocation;
 		this.cscale = config.scale;
 		this.statusKey = config.statusKey; // gotten from texthandler
-		console.log(this.statusKey,'statuskey');
 		this.sqLength = config.sqLength;
 		this.dimensions = this.createDimensions();
 	}
