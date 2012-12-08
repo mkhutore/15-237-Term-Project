@@ -106,8 +106,5 @@ App.prototype.appendGame = function(game){
 }
 
 App.prototype.startGame = function(id){
-	//window.location = "startGame/" + id; 
 	window.location = "/?id=" + id;
-	//console.log(id);
-	//this.socket.emit("startGame", {"game": id});
 }
