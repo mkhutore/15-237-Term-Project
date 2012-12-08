@@ -104,6 +104,7 @@ SpaceGame.prototype.draw = function(timeDiff){
             currentStatus = "FieldView";
         }
 		this.battlefield.draw(this.page, currentStatus);
+		
 	}
 }
 
