@@ -77,7 +77,7 @@ TextHandler.prototype.createShipConfig = function(baseConfig){
       return config;
   }
   else{
-    return createCaptainConfig(config);
+    return this.createCaptainConfig(config);
   }
 }
 
