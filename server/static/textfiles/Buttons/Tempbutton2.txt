@@ -1,0 +1,9 @@
+Temp Button 2
+150
+150
+100
+20
+#00ff00
+To shipView
+#0000ff
+captainView:shipView

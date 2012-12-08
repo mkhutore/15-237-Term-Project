@@ -2,12 +2,19 @@ var Clickable = function(clickedObject, SPEH){
 	this.dimensions = clickedObject.dimensions;
 	this.dimensions.dxf = this.dimensions.dx + this.dimensions.xLength;
 	this.dimensions.dyf = this.dimensions.dy + this.dimensions.yLength;
+	this.lIndex = clickedObject.lIndex;
 	this.typeName = clickedObject.typeName;
-	if(clickedObject.toStatus === undefined){
-		this.toStatus = SPEH;
+	if (clickedObject.altImg === undefined){
+		this.altColor = clickedObject.altColor;
 	}
 	else{
-		this.toStatus = clickedObject.toStatus;
+		this.altImg = clickedObject.altImg;
+	}
+	if(clickedObject.statusKey === undefined){
+		this.statusKey = SPEH;
+	}
+	else{
+		this.statusKey = clickedObject.statusKey;
 	}
 }
 
