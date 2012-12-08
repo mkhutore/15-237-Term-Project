@@ -54,6 +54,7 @@ SpaceGame.prototype.initStatus = function(){
     file = '/textfiles/statuses/FieldView.txt';
     statusHandler = new TextHandler(file);
     this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield);
+    this.actions = {};
 }
 
 SpaceGame.prototype.initCanvas = function(){
@@ -138,25 +139,29 @@ SpaceGame.prototype.updateBattlefield = function(){
 }
 
 SpaceGame.prototype.handlePointer = function(){
-    var px, py, rx, ry, clickables;
+    var px, py, rx, ry, clickables, i, currentScale, testHandler;
     clickables = this.currentStatus.clickables.slice(0);
     px = this.pointed.x;
     py = this.pointed.y;
     rx = this.released.x;
     ry = this.released.y;
-    var unchanged = true;
+    var unchanged = true; //unchanged is a variable used to temporarily allow access to fieldview at all times
     var currentStatusType = this.currentStatus.statusType;
-    var i;
-    var currentScale = this.page.scale;
+    currentScale = this.page.scale;
     for(i=0;i<clickables.length;i++){
         if (clickables[i].clickCheck(px, py)){
-                console.log(this.pointed.handled, this.released.handled);
                 this.changeAnimation(clickables[i], true);
                 this.pointed.handled = true;
                 unchanged = false;
             if(clickables[i].clickCheck(rx, ry) && this.released.handled === false){
                 console.log(this.pointed, this.released, 'checked');
+                console.log(currentStatusType.slice(0,currentStatusType.length-1));
+                console.log(String(currentStatusType[currentStatusType.length-1]));
                 var statusType = clickables[i].statusKey[currentStatusType];
+                changeName = clickables[i].changeName;
+                if (this[changeName] !== undefined){
+                    this[changeName]();
+                   } 
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
                     this.battlefield, currentScale); 
@@ -170,15 +175,22 @@ SpaceGame.prototype.handlePointer = function(){
             }
         }
     }
-    if(unchanged === true){
-        var testHandler;
+    if(this.pointed.handled === false || this.released.handled === false){
+        if(this.checkMenu(px, py, rx, ry)){
+            this.pointed.handled = true;
+            this.released.handled = true;
+            unchanged = false;
+            }
+
+        }
+    if(unchanged === true && this.released.handled === false){
         testHandler = new TextHandler('/textfiles/statuses/FieldView.txt');
         this.currentStatus = new gameStatus('FieldView', testHandler, this.battlefield);
         this.pointed.handled = true;
         this.released.handled = true;
+        }
     }
 
-}
 
 SpaceGame.prototype.changeAnimation = function(clicked, colbool){
     var shorter, lIndex;
@@ -189,4 +201,22 @@ SpaceGame.prototype.changeAnimation = function(clicked, colbool){
             this.currentStatus.buttonList[lIndex].clickChange = colbool;
         }
     }
+}
+
+SpaceGame.prototype.checkMenu = function(px, py, rx, ry){
+    var i, len, menus, mx, my, mW, mH;
+    menus = this.currentStatus.menus;
+    len = menus.length;
+    for(i=0;i<len;i++){
+        mx = menus[i].mx;
+        my = menus[i].my;
+        mW = menus[i].mW;
+        mH = menus[i].mH;
+        mxf = mx + mW;
+        myf = my + mH;
+        if(dimensionsCheck(px, py, mx, my, mxf, myf) && dimensionsCheck(rx, ry, mx, my, mxf, myf)){
+            return true;
+        }
+    }
+    return false;
 }

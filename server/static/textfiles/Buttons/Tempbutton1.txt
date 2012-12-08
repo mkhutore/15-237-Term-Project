@@ -7,3 +7,4 @@ Temp Button 1
 To FieldView
 #ff0000
 shipView:FieldView
+shipView:testText

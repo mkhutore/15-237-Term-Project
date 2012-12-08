@@ -16,6 +16,7 @@ var Clickable = function(clickedObject, SPEH){
 	else{
 		this.statusKey = clickedObject.statusKey;
 	}
+	this.changeKey = clickedObject.changeKey;
 }
 
 Clickable.prototype.clickCheck = function(cx, cy){

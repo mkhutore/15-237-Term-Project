@@ -36,7 +36,6 @@ gameStatus.prototype.getMenus = function(){
 		newMenu = new Menu(menuConfig);
 		menus.push(newMenu);
 	}
-	console.log(menus);
 	this.menus = menus;
 }
 
