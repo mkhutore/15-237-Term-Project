@@ -44,7 +44,6 @@ io.sockets.on('connection', function(socket){
 			console.log("Make new game");
 			var p1 = requests.pop();
 			var p2 = requests.pop();
-			//games.push({"player1" : p1, "player2" : p2});
 			var game = new Game({"player1": p1, "player2": p2});
 			game.startedTimestamp = new Date();
 			game.save();
