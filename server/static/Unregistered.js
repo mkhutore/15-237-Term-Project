@@ -1,4 +1,7 @@
 var App = function(){
+	if (typeof(localStorage)!=="undefined" && window.localStorage.spaceGameUsername !== "undefined") {
+		$('#loginUsername').val(window.localStorage.spaceGameUsername);
+	}
     this.registerEvents();
 }
 
@@ -49,6 +52,10 @@ App.prototype.registerLogin = function(){
     $('#login').onButtonTap(function(){
         var username = $('#loginUsername').val();
         var password = $('#loginPassword').val();
+		
+		if (typeof(localStorage)!=="undefined") {
+			window.localStorage.spaceGameUsername = username;
+		}
 
         var data = new FormData();
         data.append('username', username);
