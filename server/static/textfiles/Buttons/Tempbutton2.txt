@@ -7,3 +7,4 @@ Temp Button 2
 To shipView
 #0000ff
 captainView:shipView
+captainView:testText

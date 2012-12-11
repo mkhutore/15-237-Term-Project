@@ -18,4 +18,5 @@ var gameButton = function(config, scale, lIndex){
 	this.img.src = '/images/Ships.gif';
 	this.bColor = config.bColor;
 	this.statusKey = config.statusKey;
+	this.changeKey = config.changeKey;
 }

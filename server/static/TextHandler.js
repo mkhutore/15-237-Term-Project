@@ -41,15 +41,28 @@ TextHandler.prototype.getStatusKey = function(file){
 }
 
 TextHandler.prototype.createKeyConfig = function(line){
-  var len, i, prekey, key, keyLines;
+  var len, i, j, prekey, key, temp, tempLen, keyLines;
+  if(line !== undefined){
   keyLines = line.split(';');
   len = keyLines.length;
   key = {};
   for(i=0;i<len;i++){
     prekey = keyLines[i].split(':');
+    for(j=0;j<prekey.length;j++){
+      temp = prekey[j];
+      tempLen = temp.length;
+      if(!withinDims(temp.charCodeAt(tempLen-1),65,122)) //removes whitespace
+      {
+        prekey[j] = temp.slice(0,temp.length-1);
+      }
+    }
     key[prekey[0]] = prekey[1]; //the prekey will always have two sections
   }
   return key;
+}
+  else{
+    return {};
+  }
 }
 
 TextHandler.prototype.createShipConfig = function(baseConfig){
@@ -142,6 +155,7 @@ TextHandler.prototype.createMenuConfig = function(){
 }
 TextHandler.prototype.createButtonConfig = function(){
   var config;
+  console.log(this.lines);
   config = {};
   config.buttonName = this.lines[0];
   config.dx = parseInt(this.lines[1]);
@@ -152,6 +166,7 @@ TextHandler.prototype.createButtonConfig = function(){
   config.displayText = this.lines[6];
   config.bColor = this.lines[7];
   config.statusKey = this.createKeyConfig(this.lines[8]);
+  config.changeKey = this.createKeyConfig(this.lines[9]);
   return config;
 }
 
