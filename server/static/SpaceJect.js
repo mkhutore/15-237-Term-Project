@@ -13,6 +13,7 @@ var SpaceJect = function(config){
 		this.statusKey = config.statusKey; // gotten from texthandler
 		this.sqLength = config.sqLength;
 		this.dimensions = this.createDimensions();
+		this.changeKey = {};
 	}
 }
 

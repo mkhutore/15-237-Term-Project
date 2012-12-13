@@ -34,6 +34,14 @@ ScaledPage.prototype.drawStatus = function(status){ //this is a test function!
 
 }
 
+ScaledPage.prototype.drawDtext = function(status){ //this is a test function!
+    this.page.font = "30px Arial";
+    this.page.textAlign = "center";
+    this.page.fillStyle = "yellow";
+    this.page.fillText(status, this.canvas.width()/2, 100);
+
+}
+
 ScaledPage.prototype.drawButtonText = function(x, y, width, height, text){
     var font, fontSize, textX, textY;
     fontSize = (((width + height)/2) * this.scale)/5;
@@ -44,6 +52,11 @@ ScaledPage.prototype.drawButtonText = function(x, y, width, height, text){
     textX = ((2 * x) + width) / 2;
     textY = ((1.5 * y) + height) / 1.5;
     this.page.fillText(text, textX*this.scale, textY*this.scale);
+}
+
+ScaledPage.prototype.drawButtonImg = function(x, y, w, h, img){
+    scale = this.scale;
+    this.page.drawImage(img, x*scale, y*scale, w*scale, h*scale);
 }
 
 ScaledPage.prototype.lineRect = function(x, y, width, height){

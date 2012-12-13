@@ -1,0 +1,10 @@
+TestShip
+120
+30
+50
+50
+images/Spaceships/Assaultboat.png
+To FieldView
+images/Spaceships/Assaultboat.png
+captainView:FieldView;deployView:captainView
+captainView:testText

@@ -1,0 +1,10 @@
+CaptainAttack
+110
+35
+200
+43
+images/Buttons/AttackDown.png
+To shipView
+images/Buttons/Attack.png
+captainView:FieldView
+captainView:testText

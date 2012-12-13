@@ -4,11 +4,12 @@ var Clickable = function(clickedObject, SPEH){
 	this.dimensions.dyf = this.dimensions.dy + this.dimensions.yLength;
 	this.lIndex = clickedObject.lIndex;
 	this.typeName = clickedObject.typeName;
-	if (clickedObject.altImg === undefined){
+	this.player = clickedObject.player;
+	if (clickedObject.altImgurl === undefined){
 		this.altColor = clickedObject.altColor;
 	}
 	else{
-		this.altImg = clickedObject.altImg;
+		this.altImgurl = clickedObject.altImgurl;
 	}
 	if(clickedObject.statusKey === undefined){
 		this.statusKey = SPEH;

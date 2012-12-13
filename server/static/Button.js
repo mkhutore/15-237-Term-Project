@@ -14,8 +14,18 @@ var gameButton = function(config, scale, lIndex){
 	this.typeName = 'button';
 	this.altColor = config.altColor;
 	this.displayText = config.displayText;
-	this.img = new Image();
-	this.img.src = '/images/Ships.gif';
+	this.bImg = new Image();
+	if(config.bImgurl !== undefined){
+		this.imageStatus = true;
+		this.bImgurl = config.bImgurl;
+		this.bImg.src = this.bImgurl;
+		this.altImgurl = config.altImgurl;
+	}
+	else{
+		this.bImgurl = '/images/button-disabled.png';
+		this.bImg.src = '/images/button-disabled.png';
+		this.altImgurl = '/images/button-disabled.png';
+	}
 	this.bColor = config.bColor;
 	this.statusKey = config.statusKey;
 	this.changeKey = config.changeKey;

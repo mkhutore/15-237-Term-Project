@@ -47,6 +47,7 @@ gameStatus.prototype.getButtonList = function(){
 	else{
 		len = this.buttonDirectory.length;
 		buttonList = []
+		console.log(this.buttonDirectory);
 		for(i=0;i<len;i++){
 			direct = '/textfiles/Buttons/' + this.buttonDirectory[i];
 			buttonHandler = new TextHandler(direct)
@@ -54,8 +55,26 @@ gameStatus.prototype.getButtonList = function(){
 			newButton = new gameButton(buttonConfig, this.scale, i);
 			buttonList.push(newButton);
 		}
+		if(this.statusType === 'deployView'){
+			buttonList = this.getShipButtons(buttonList);
+		}
 		return buttonList;
 	}
+}
+
+gameStatus.prototype.getShipButtons = function(buttonList){
+	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler;
+	currentCaptain = this.battlefield.getCurrentCaptain();
+	console.log(currentCaptain);
+	shipButtons = currentCaptain.deploys;
+	len = shipButtons.length;
+	for(i=0;i<len;i++){
+		buttonHandler = new TextHandler('/textfiles/Buttons/' + shipButtons[i] + '.txt');
+		buttonConfig = buttonHandler.createButtonConfig();
+		shipButton = new gameButton(buttonConfig);
+		buttonList.push(shipButton);
+	}
+	return buttonList;
 }
 
 gameStatus.prototype.initFieldView = function(){
@@ -119,20 +138,34 @@ gameStatus.prototype.drawButtons = function(scaledPage){
 }
 
 gameStatus.prototype.drawButton = function(button, scaledPage, i){
-	var x, y, xL, yL, bColor, text;
+	var x, y, xL, yL, bColor, bImg, bImgurl, text;
 	x = button.dx;
 	y = button.dy;
 	xL = button.bWidth;
 	yL = button.bHeight;
-	if (button.clickChange === true){
+	if (button.clickChange){
 		bColor = button.altColor;
+		if(!pathComparison(button.bImg.src, button.altImgurl)){
+			console.log("asdf");
+			button.bImg.src = button.altImgurl;
+		}
+
+
 	}
 	else{
 		bColor = button.bColor;
+		if(!pathComparison(button.bImg.src, button.bImgurl)){
+			button.bImg.src = button.bImgurl;
+		}
 	}
 	text = button.displayText;
 	//console.log(button, x, y, xL, yL, bColor, text);
-	scaledPage.fillRect(x,y,xL,yL,bColor);
+	if(button.imageStatus === undefined){
+			scaledPage.fillRect(x,y,xL,yL,bColor);
 	//console.log('drawbuttontext');
 	scaledPage.drawButtonText(x,y,xL,yL,text);
+	}
+	else{
+		scaledPage.drawButtonImg(x, y, xL, yL, button.bImg);
+	}
 }
