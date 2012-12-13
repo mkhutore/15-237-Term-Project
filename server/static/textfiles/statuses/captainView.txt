@@ -1,3 +1,3 @@
 false
-Tempbutton2.txt
-MiniMenu.txt
+captainClose.txt;captainAttack.txt;captainDeploy.txt
+captainMenu.txt

@@ -6,7 +6,7 @@ var App = function(){
     $('#newGame').onButtonTap(this.requestGame.bind(this));
 
 	this.table = $("#gameTable");
-	this.socket = io.connect('http://localhost:3000/');
+	this.socket = io.connect('localhost:3000/');
 	
 	this.setUser();
 	this.update();

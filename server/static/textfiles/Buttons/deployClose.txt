@@ -1,0 +1,10 @@
+DeployClose
+360
+35
+200
+43
+images/Buttons/CloseDown.png
+To FieldView
+images/Buttons/Close.png
+captainView:FieldView;deployView:captainView
+captainView:testText

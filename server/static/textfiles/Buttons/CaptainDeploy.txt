@@ -1,0 +1,9 @@
+CaptainDeploy
+110
+90
+200
+43
+images/Buttons/DeployDown.png
+To shipView
+images/Buttons/Deploy.png
+captainView:deployView

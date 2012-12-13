@@ -1,7 +1,11 @@
-var Battlefield = function(config){
+var Battlefield = function(config, user){
 	this.width = config.width;
 	this.height = config.height;
 	this.gridVal = 8;
+	this.player1 = config.player1;
+	this.player2 = config.player2;
+	console.log(user);
+	this.user = user;
 	this.sqLength = Math.min(this.width, this.height) / this.gridVal;
 	this.fieldRows = this.width/this.sqLength;
 	this.fieldCols = this.height/this.sqLength;
@@ -58,19 +62,30 @@ Battlefield.prototype.initField = function(config){
 }
 
 Battlefield.prototype.initCaptains = function(){
-	var shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2}
-	var shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2}
+	var shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2, 'player' : this.player1}
+	var shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2, 'player': this.player2}
 	cptFile1 = '/textfiles/shipsdata/CaptainShips/TestCaptain1.txt'
 	cptFile2 = '/textfiles/shipsdata/CaptainShips/TestCaptain2.txt'
 	this.shipHandler = new TextHandler(cptFile1);
 	this.shipConfig = this.shipHandler.createShipConfig(shipone);
 	this.fieldData[0][this.gridVal/2] = new captainShip(this.shipConfig);
+	this.captain1 = this.fieldData[0][this.gridVal/2];
 	this.spacejectList.push(this.fieldData[0][this.gridVal/2]);
 	this.shipHandler = new TextHandler(cptFile2);
 	this.shipConfig = this.shipHandler.createShipConfig(shiptwo);
 	this.fieldData[this.fieldRows-1][this.gridVal/2] = 
 	new captainShip(this.shipConfig);
+	this.captain2 = this.fieldData[this.fieldRows-1][this.gridVal/2];
 	this.spacejectList.push(this.fieldData[this.fieldRows-1][this.gridVal/2])
+}
+
+Battlefield.prototype.getCurrentCaptain = function(){
+	if(this.captain1.player === this.user){
+		return this.captain1;
+	}
+	else{
+		return this.captain2;
+	}
 }
 
 Battlefield.prototype.createShip = function(bx, by, scale){
@@ -89,7 +104,6 @@ Battlefield.prototype.createShip = function(bx, by, scale){
 
 
 Battlefield.prototype.draw = function(scaledPage,status){
-	scaledPage.drawStatus(status);
 	var i;
 	var j;
 	for (i=0;i<this.fieldRows;i++)
@@ -111,4 +125,5 @@ Battlefield.prototype.draw = function(scaledPage,status){
 		if(status === 'shipView'){
 			//scaledPage.fillRect(100,100,200,150,'red');
 	}
+	scaledPage.drawStatus(status);
 }

@@ -71,10 +71,9 @@ TextHandler.prototype.createShipConfig = function(baseConfig){
       config = this.createSpaceJectConfig(baseConfig);
       config.shipName = this.lines[0];
       config.faction = this.lines[1];
-      config.shipClass = this.lines[2];
+      config.shipClass = whiteSpaceCheck(this.lines[2]);
       config.HP = parseInt(this.lines[3]);
       config.HPMod = 1;
-      config.player = 0;
       config.atkList = this.getAttackList(this.lines[4]);
       config.SDStr = parseInt(this.lines[5]);
       config.SDCapac = parseInt(this.lines[6]);
@@ -155,16 +154,25 @@ TextHandler.prototype.createMenuConfig = function(){
 }
 TextHandler.prototype.createButtonConfig = function(){
   var config;
-  console.log(this.lines);
   config = {};
   config.buttonName = this.lines[0];
   config.dx = parseInt(this.lines[1]);
   config.dy = parseInt(this.lines[2]);
   config.bWidth = parseInt(this.lines[3]);
   config.bHeight = parseInt(this.lines[4]);
-  config.altColor = this.lines[5];
+  if(this.lines[5][0] === '#'){
+    config.altColor = this.lines[5];
+  }
+  else{
+    config.altImgurl = this.lines[5];
+  }
   config.displayText = this.lines[6];
-  config.bColor = this.lines[7];
+  if(this.lines[7][0] === '#'){
+    config.bColor = this.lines[7];
+  }
+  else{
+    config.bImgurl = this.lines[7];
+  }
   config.statusKey = this.createKeyConfig(this.lines[8]);
   config.changeKey = this.createKeyConfig(this.lines[9]);
   return config;

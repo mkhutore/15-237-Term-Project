@@ -11,7 +11,7 @@ SpaceGame.prototype.setup = function(){
 	this.user = this.getSessionCookie()["user"];
 	this.getData();
     this.initCanvas();
-    TouchHandler.init(this);
+    //TouchHandler.init(this);
     this.initAccelerometer();
 }
 
@@ -25,7 +25,7 @@ SpaceGame.prototype.getData = function(){
 		console.log(game);
 		this.player1 = game.player1;
 		this.player2 = game.player2;
-		this.initBattlefield(game.objects);
+		this.initBattlefield(game.objects, this.player1, this.player2);
 		this.draw();
 		this.initStatus();
 	}.bind(this));
@@ -44,9 +44,10 @@ SpaceGame.prototype.getSessionCookie = function(){
 	return cookies;
 }
 
-SpaceGame.prototype.initBattlefield = function(objects){
+SpaceGame.prototype.initBattlefield = function(objects, player1, player2){
     this.battlefield = new Battlefield({'width':this.width,
-     'height':this.height, 'spacejects':objects, 'scale':this.page.scale});
+     'height':this.height, 'spacejects':objects, 'scale':this.page.scale,
+    'player1' : player1, 'player2': player2}, this.user);
 }
 
 SpaceGame.prototype.initStatus = function(){
@@ -66,28 +67,61 @@ SpaceGame.prototype.initCanvas = function(){
     this.backgroundImg = new Image();
     this.backgroundImg.src = 'images/Space_bg2.gif';
     this.canvas = window.util.makeAspectRatioCanvas(this.body, this.width/this.height);
+    $(this.canvas).attr("unselectable", "on");
     this.pointed = new Pointed({'x':0,'y':0,'handled':true, 'pointType':'None'});
     this.released = new Pointed({'x':0, 'y':0, 'handled': true, 'pointType':'None'});
     if(!window.util.isIOS() && !window.util.isAndroid())
         {
-            $(this.canvas).bind('mousedown', this.onClick.bind(this));
+            $(this.canvas).bind('mousedown', this.onClickStart.bind(this));
         }
+    else{
+        $(this.canvas).bind('touchstart', this.onClickStart.bind(this));
+    }
     if(!window.util.isIOS() && (!window.util.isAndroid())){
-        $(this.canvas).bind('mouseup', this.onClick.bind(this));
+        $(this.canvas).bind('mouseup', this.onClickEnd.bind(this));
+    }
+    else{
+        $(this.canvas).bind('touchend', this.onClickEnd.bind(this));
     }
     this.page = new ScaledPage(this.canvas, this.width);
 }
 
-SpaceGame.prototype.onClick = function(event){ //this.pointed calls the current pointed
+SpaceGame.prototype.onClickStart = function(event){ //this.pointed calls the current pointed
     var differ, coorX, coorY;
-    coorX = event.pageX - $(this.canvas).offset().left;
-    coorY = event.pageY - $(this.canvas).offset().top;
-    if(event.type === "mousedown"){
-        differ = 'pointed';
-      }
-    if(event.type === "mouseup"){
-        differ = 'released';
+    if(event.type === 'touchstart'){
+        coorX = event.originalEvent.targetTouches[0].pageX;
+        coorY = event.originalEvent.targetTouches[0].pageY;
     }
+    else{
+        coorX = event.pageX;
+        coorY = event.pageY;
+    }
+    coorX -= $(this.canvas).offset().left;
+    coorY -= $(this.canvas).offset().top;
+    differ = 'pointed';
+    this[differ]= new Pointed({'x': coorX, 'y': coorY, 'handled' : false,
+        'pointType' : 'click'});
+    /* console.log('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
+            + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
+            + this[differ].x + ',' + this[differ].y + ',' + this[differ].handled); */
+    console.log(this[differ]);
+}
+
+SpaceGame.prototype.onClickEnd = function(event){ //this.pointed calls the current pointed
+    var differ, coorX, coorY;
+    if(event.type === 'touchend'){
+        coorX = event.originalEvent.changedTouches[0].pageX;
+        coorY = event.originalEvent.changedTouches[0].pageY;
+    }
+    else{
+        coorX = event.pageX;
+        coorY = event.pageY;
+    }
+    //alert(coorX);
+    //alert(coorY);
+    coorX = coorX - $(this.canvas).offset().left;
+    coorY = coorY -  $(this.canvas).offset().top;
+    differ = 'released';
     this[differ]= new Pointed({'x': coorX, 'y': coorY, 'handled' : false,
         'pointType' : 'click'});
     /* console.log('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
@@ -124,6 +158,9 @@ SpaceGame.prototype.draw = function(timeDiff){
             this.currentStatus.drawButtons(this.page);
 
         }
+        if (this.actions !== undefined && this.actions.dtext !== undefined){
+            this.page.drawDtext(this.actions.dtext);
+        }
 	}
 }
 
@@ -145,27 +182,20 @@ SpaceGame.prototype.handlePointer = function(){
     py = this.pointed.y;
     rx = this.released.x;
     ry = this.released.y;
-    var unchanged = true; //unchanged is a variable used to temporarily allow access to fieldview at all times
     var currentStatusType = this.currentStatus.statusType;
     currentScale = this.page.scale;
+    if(this.released.handled === false){
+        this.actionCheck(rx, ry);
+    }
     for(i=0;i<clickables.length;i++){
         if (clickables[i].clickCheck(px, py)){
                 this.changeAnimation(clickables[i], true);
                 this.pointed.handled = true;
-                unchanged = false;
             if(clickables[i].clickCheck(rx, ry) && this.released.handled === false){
-                console.log(this.pointed, this.released, 'checked');
-                console.log(currentStatusType.slice(0,currentStatusType.length-1));
-                console.log(String(currentStatusType[currentStatusType.length-1]));
                 var statusType = clickables[i].statusKey[currentStatusType];
-                changeName = clickables[i].changeName;
-                if (this[changeName] !== undefined){
-                    this[changeName]();
-                   } 
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
                     this.battlefield, currentScale); 
-                unchanged = false;
                 this.pointed.handled = true;
                 this.released.handled = true;
             }
@@ -179,26 +209,32 @@ SpaceGame.prototype.handlePointer = function(){
         if(this.checkMenu(px, py, rx, ry)){
             this.pointed.handled = true;
             this.released.handled = true;
-            unchanged = false;
             }
 
         }
-    if(unchanged === true && this.released.handled === false){
-        testHandler = new TextHandler('/textfiles/statuses/FieldView.txt');
-        this.currentStatus = new gameStatus('FieldView', testHandler, this.battlefield);
-        this.pointed.handled = true;
-        this.released.handled = true;
-        }
     }
 
+SpaceGame.prototype.actionCheck = function(rx, ry){
+    if(this.currentStatus.statusType === 'shipMove'){
+        alert("Movin!");
+    }
+    if(this.currentStatus.statusType === 'shipTarget'){
+        alert("attackin!");
+    }
+}
 
-SpaceGame.prototype.changeAnimation = function(clicked, colbool){
+
+SpaceGame.prototype.changeAnimation = function(clicked, changebool){
     var shorter, lIndex;
     if (clicked.typeName === 'button'){
-        if (clicked.altColor !== undefined){
+        if (clicked.altImgurl !== undefined){
+            lIndex = clicked.lIndex;
+            this.currentStatus.buttonList[lIndex].clickChange = changebool;
+        }
+        else if (clicked.altColor !== undefined){
             lIndex = clicked.lIndex;
             //shorter = this.currentStatus.buttonList[lIndex].clickChange;
-            this.currentStatus.buttonList[lIndex].clickChange = colbool;
+            this.currentStatus.buttonList[lIndex].clickChange = changebool;
         }
     }
 }
@@ -219,4 +255,12 @@ SpaceGame.prototype.checkMenu = function(px, py, rx, ry){
         }
     }
     return false;
+}
+
+SpaceGame.prototype.testText = function(){
+    this.actions.dtext = 'test';
+}
+
+SpaceGame.prototype.nullText = function(){
+    this.actions.dtext = undefined;
 }
