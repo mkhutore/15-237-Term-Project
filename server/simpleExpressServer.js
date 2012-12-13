@@ -34,8 +34,6 @@ http.get(options, function(res) {
 
 // list of game requests
 var requests = [];
-// list of games
-//var games = [];
 var maxid = 0;
 
 // Listen for client connection event
@@ -93,14 +91,10 @@ app.configure(function(){
 
 var User = initPassportUser();
 
-mongoose.connect('mongodb://spacegame.netgameonline.com/myApp');
+mongoose.connect('mongodb://localhost/myApp');
 
 require('./loginRoutes')(app);
 require('./appRoutes')(app);
-
-/* http.createServer(app).listen(8889, function() {
-	console.log("Express server listening on port %d", 8889);
-}); */
 
 function initPassportUser(){
     var User = require('./User');
