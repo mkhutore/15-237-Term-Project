@@ -47,7 +47,6 @@ gameStatus.prototype.getButtonList = function(){
 	else{
 		len = this.buttonDirectory.length;
 		buttonList = []
-		console.log(this.buttonDirectory);
 		for(i=0;i<len;i++){
 			direct = '/textfiles/Buttons/' + this.buttonDirectory[i];
 			buttonHandler = new TextHandler(direct)
@@ -58,12 +57,14 @@ gameStatus.prototype.getButtonList = function(){
 		if(this.statusType === 'deployView'){
 			buttonList = this.getShipButtons(buttonList);
 		}
+		console.log(buttonList[1]);
 		return buttonList;
 	}
 }
 
 gameStatus.prototype.getShipButtons = function(buttonList){
-	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler;
+	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler, preLen;
+	preLen = buttonList.length;
 	currentCaptain = this.battlefield.getCurrentCaptain();
 	console.log(currentCaptain);
 	shipButtons = currentCaptain.deploys;
@@ -71,7 +72,7 @@ gameStatus.prototype.getShipButtons = function(buttonList){
 	for(i=0;i<len;i++){
 		buttonHandler = new TextHandler('/textfiles/Buttons/' + shipButtons[i] + '.txt');
 		buttonConfig = buttonHandler.createButtonConfig();
-		shipButton = new gameButton(buttonConfig);
+		shipButton = new gameButton(buttonConfig, this.scale, preLen + i);
 		buttonList.push(shipButton);
 	}
 	return buttonList;
@@ -107,6 +108,7 @@ gameStatus.prototype.createClickables = function(spacejects, buttons,
 		clickables.push(newClick);
 	}
 	this.clickables = clickables;
+	console.log(clickables);
 }
 
 //Draw

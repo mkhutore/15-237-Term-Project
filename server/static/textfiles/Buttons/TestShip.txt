@@ -3,8 +3,8 @@ TestShip
 30
 50
 50
-images/Spaceships/Assaultboat.png
+images/Buttons/CloseDown.png
 To FieldView
-images/Spaceships/Assaultboat.png
+images/Buttons/Close.png
 captainView:FieldView;deployView:captainView
 captainView:testText
