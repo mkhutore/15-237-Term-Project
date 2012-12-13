@@ -4,7 +4,7 @@
 var fs = require("fs");
 var path = require("path");
 var express = require("express");
-var http = require('http'); // lessee if dis will work
+var http = require('http');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -12,6 +12,21 @@ var LocalStrategy = require('passport-local').Strategy;
 var Game = require("./Game");
 
 var io = require('socket.io').listen(3000);
+
+//======================================
+//      update IP
+//======================================
+
+var options = {
+  host: 'freedns.afraid.org',
+  path: '/dynamic/update.php?VU1vQ2ZhMzFVMVVBQUt1MVE0VUFBQUFGOjg3NTYyMDE='
+};
+
+http.get(options, function(res) {
+  console.log('STATUS: ' + res.statusCode);
+}).on('error', function(e) {
+  console.log('ERROR: ' + e.message);
+});
 
 //======================================
 //      sockets
@@ -78,7 +93,7 @@ app.configure(function(){
 
 var User = initPassportUser();
 
-mongoose.connect('mongodb://localhost/myApp');
+mongoose.connect('mongodb://spacegame.netgameonline.com/myApp');
 
 require('./loginRoutes')(app);
 require('./appRoutes')(app);
