@@ -1,0 +1,10 @@
+DeployReject
+350
+230
+200
+43
+images/Buttons/BackDown.png
+To FieldView
+images/Buttons/Back.png
+deployView:deployStatView
+captainView:testText

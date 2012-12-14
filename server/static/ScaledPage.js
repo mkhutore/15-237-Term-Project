@@ -2,6 +2,7 @@ ScaledPage = function(canvas, virtualWidth){
     this.canvas = canvas;
     this.page = this.canvas[0].getContext('2d');
     this.scale = this.canvas.width() / virtualWidth;
+    this.testVal = 1;
 }
 
 ScaledPage.prototype.pageToCanvas = function(pageX, pageY) {
@@ -40,6 +41,22 @@ ScaledPage.prototype.drawDtext = function(status){ //this is a test function!
     this.page.fillStyle = "yellow";
     this.page.fillText(status, this.canvas.width()/2, 100);
 
+}
+
+ScaledPage.prototype.drawStatText = function(status, x, y, font){
+    if(font !== undefined){
+        this.page.font = font;
+    }
+    else{
+        this.page.font = "15px Arial";
+    }
+    this.page.textAlign = "center";
+    this.page.fillStyle = "white";
+    this.page.fillText(status, x, y);
+    if(this.testVal > 0){
+        this.testVal--;
+        console.log("SHOULDWORK");
+    }
 }
 
 ScaledPage.prototype.drawButtonText = function(x, y, width, height, text){
@@ -84,8 +101,8 @@ ScaledPage.prototype.spaceShip = function(x, y, img, sqLength){
     //var sy = 4;
     //var sWidth = 58;
     //var sHeight = 58;
-    var dHeight = 32*this.scale;
-    var dWidth = 32*this.scale;
+    var dHeight = sqLength*this.scale;
+    var dWidth = sqLength*this.scale;
     var dx = (x*this.scale);
     var dy = (y*this.scale);
     //this.page.drawImage(img, dx, dy);

@@ -4,7 +4,7 @@ var Battlefield = function(config, user){
 	this.gridVal = 8;
 	this.player1 = config.player1;
 	this.player2 = config.player2;
-	console.log(user);
+	console.log(user, 'is user');
 	this.user = user;
 	this.sqLength = Math.min(this.width, this.height) / this.gridVal;
 	this.fieldRows = this.width/this.sqLength;

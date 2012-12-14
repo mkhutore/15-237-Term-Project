@@ -1,4 +1,5 @@
 var Clickable = function(clickedObject, SPEH){
+	this.buttonName = clickedObject.buttonName;
 	this.dimensions = clickedObject.dimensions;
 	this.dimensions.dxf = this.dimensions.dx + this.dimensions.xLength;
 	this.dimensions.dyf = this.dimensions.dy + this.dimensions.yLength;

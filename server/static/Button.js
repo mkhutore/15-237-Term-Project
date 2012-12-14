@@ -2,7 +2,7 @@
 
 var gameButton = function(config, scale, lIndex){
 	var displayType, dTLen;
-	this.buttonName = config.buttonName;
+	this.buttonName = whiteSpaceCheck(config.buttonName);
 	this.dx = config.dx;
 	this.dy = config.dy;
 	this.lIndex = lIndex;
