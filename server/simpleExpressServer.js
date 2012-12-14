@@ -70,6 +70,10 @@ io.sockets.on('connection', function(socket){
 			io.sockets.emit("setupGame", {"game": game});
 		});
 	});
+	
+	socket.on("turnEnd", function(data) {
+		io.sockets.emit("newTurn", data);
+	})
 });
 
 //======================================

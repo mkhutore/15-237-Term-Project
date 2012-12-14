@@ -8,14 +8,24 @@ var SpaceGame = function(){
 SpaceGame.prototype.setup = function(){
     window.util.patchRequestAnimationFrame();
     window.util.patchFnBind();
+	
+	this.socket = io.connect('http://localhost.com:3000/');
+	this.socket.on("newTurn", function(data){
+		if(data.id === this.getSessionCookie()["id"] && data.user !== this.user)
+		{
+			this.getData();
+		}
+	}.bind(this));
+	
 	this.user = this.getSessionCookie()["user"];
-	this.getData();
+	this.getData(false);
     this.initCanvas();
     //TouchHandler.init(this);
     this.initAccelerometer();
+	
 }
 
-SpaceGame.prototype.getData = function(){
+SpaceGame.prototype.getData = function(myTurn){
 	var gameId = this.getSessionCookie()["id"];
 	var req = $.ajax({
         url: '/db/game',
@@ -25,6 +35,11 @@ SpaceGame.prototype.getData = function(){
 		console.log(game);
 		this.player1 = game.player1;
 		this.player2 = game.player2;
+		
+		if(this.player1 === this.user) this.myTurn = true;
+		else this.myTurn = false;
+		if(myTurn) this.myTurn = true;
+		
 		this.initBattlefield(game.objects, this.player1, this.player2);
 		this.draw();
 		this.initStatus();
@@ -402,4 +417,15 @@ SpaceGame.prototype.testText = function(){
 
 SpaceGame.prototype.nullText = function(){
     this.actions.dtext = undefined;
+}
+// make sure to set myTurn = false when you end the turn
+SpaceGame.prototype.save = function(){
+	var gameId = this.getSessionCookie()["id"];
+	var req = $.ajax({
+        url: '/db/save',
+        type: 'POST',
+        data: {"id" : gameId, "objects": this.battlefield.spacejectList}});
+    req.done(function(game){
+		this.socket.emit("turnEnd", {"id": gameId, "user": this.user});
+	}.bind(this));
 }
