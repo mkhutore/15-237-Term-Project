@@ -23,7 +23,7 @@ function withinDims(point, start, end){
 
 function whiteSpaceCheck(string){
 	len = string.length;
-	if(!withinDims(string.charCodeAt(len-1), 65, 122)){
+	if(string.charCodeAt(len-1) === 13){
 		return string.slice(0,len-1);
 	}
 	else{

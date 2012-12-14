@@ -1,0 +1,10 @@
+DeployConfirm
+120
+230
+200
+43
+images/Buttons/DeployDown.png
+To FieldView
+images/Buttons/Deploy.png
+deployView:deployStatView
+captainView:testText

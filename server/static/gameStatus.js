@@ -6,6 +6,8 @@ var gameStatus = function(statusType, statusHandler, battlefield, scale){
 	this.buttons = this.statusHandler.lines[1];
 	this.buttonDirectory = this.statusHandler.lines[1].split(';');
 	this.scale = scale;
+	this.testVal = 1;
+	this.imgList = [];
 	this.initStatus();
 	if (this.statusHandler.lines[2] !== 'None'){
 		this.menurls = this.statusHandler.lines[2].split(';');
@@ -57,7 +59,6 @@ gameStatus.prototype.getButtonList = function(){
 		if(this.statusType === 'deployView'){
 			buttonList = this.getShipButtons(buttonList);
 		}
-		console.log(buttonList[1]);
 		return buttonList;
 	}
 }
@@ -66,7 +67,6 @@ gameStatus.prototype.getShipButtons = function(buttonList){
 	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler, preLen;
 	preLen = buttonList.length;
 	currentCaptain = this.battlefield.getCurrentCaptain();
-	console.log(currentCaptain);
 	shipButtons = currentCaptain.deploys;
 	len = shipButtons.length;
 	for(i=0;i<len;i++){
@@ -109,7 +109,6 @@ gameStatus.prototype.createClickables = function(spacejects, buttons,
 		clickables.push(newClick);
 	}
 	this.clickables = clickables;
-	console.log(clickables);
 }
 
 //Draw
@@ -132,11 +131,60 @@ gameStatus.prototype.drawMenu = function(menu, scaledPage){
 	scaledPage.fillRect(x, y, xL, yL, mColor);
 }
 
+gameStatus.prototype.drawData = function(scaledPage, actions){
+	if(this.statusType === 'deployStatView'){
+		if(actions.deploy !== undefined){
+			this.drawShipData(scaledPage, actions.deploy);
+		}
+	}
+}
+
+gameStatus.prototype.drawShipData = function(scaledPage, deploy){
+	var deployUrl, deployHandler, deployConfig, img;
+	deployUrl = '/textfiles/shipsdata/' + deploy + '.txt';
+	deployHandler = new TextHandler(deployUrl);
+	deployConfig = deployHandler.createShipConfig({});
+	this.drawShipImage(scaledPage, deployConfig);
+	this.drawShipTextData(scaledPage, deployConfig);
+
+}
+
+gameStatus.prototype.drawShipImage = function(scaledPage, config){
+	boxHeight = 60;
+	centerX = (scaledPage.canvas.width() / scaledPage.scale) / 4;
+	centerY = (scaledPage.canvas.height() / scaledPage.scale) / 3;
+	img = this.imageCheck(config);
+	scaledPage.spaceShip(centerX, centerY, img, boxHeight);
+}
+
+gameStatus.prototype.drawShipTextData = function(scaledPage, config){
+	var leftX, startY, rightX;
+	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 3;
+	startY = (scaledPage.canvas.height() / scaledPage.scale) / 5;
+	scaledPage.drawStatText(config.shipName, leftX, startY);
+}
+
+gameStatus.prototype.imageCheck = function(config){
+	var i, len, imgurl, newImg;
+	imgurl = config.imgurl;
+	len = this.imgList.length;
+	for(i=0;i<len;i++){
+		if(pathComparison(this.imgList[i].src, imgurl)){
+			return this.imgList[i];
+		}
+	}
+	newImg = new Image();
+	newImg.src = imgurl;
+	this.imgList.push(newImg);
+	return newImg;
+}
+
 gameStatus.prototype.drawButtons = function(scaledPage){
 	var len, i;
 	len = this.buttonList.length;
 	for(i=0;i<len;i++){
 		this.drawButton(this.buttonList[i], scaledPage, i);
+
 	}
 }
 
@@ -149,7 +197,6 @@ gameStatus.prototype.drawButton = function(button, scaledPage, i){
 	if (button.clickChange){
 		bColor = button.altColor;
 		if(!pathComparison(button.bImg.src, button.altImgurl)){
-			console.log("asdf");
 			button.bImg.src = button.altImgurl;
 		}
 

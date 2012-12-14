@@ -155,6 +155,7 @@ SpaceGame.prototype.draw = function(timeDiff){
 		this.battlefield.draw(this.page, currentStatus);
         if(this.currentStatus !== undefined){
             this.currentStatus.drawMenus(this.page);
+            this.currentStatus.drawData(this.page, this.actions);
             this.currentStatus.drawButtons(this.page);
 
         }
@@ -197,6 +198,7 @@ SpaceGame.prototype.handlePointer = function(){
             this.changeAnimation(clickables[i], true);
             this.pointed.handled = true;
             if(clickables[i].clickCheck(rx, ry) && this.released.handled === false){
+                this.buttonCheck(currentStatusType, clickables[i]);
                 var statusType = clickables[i].statusKey[currentStatusType];
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
@@ -239,10 +241,20 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 			this.released.handled = true;
 			this.pointed.handled = true;
 		}
-    }
+	}
 	console.log(this.battlefield.spacejectList);
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
+    }
+}
+
+SpaceGame.prototype.buttonCheck = function(currentStatusType, clicked){
+    if(clicked.typeName === 'button'){
+        if(currentStatusType === 'deployView'){
+            if(clicked.buttonName !== undefined){
+                this.actions.deploy = clicked.buttonName;
+            }
+        }
     }
 }
 
