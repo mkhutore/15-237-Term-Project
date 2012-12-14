@@ -1,0 +1,10 @@
+chooseAttack
+120
+35
+43
+43
+images/Buttons/AttackSmallDown.png
+To shipView
+images/Buttons/AttackSmall.png
+attackView:targetView
+captainView:testText

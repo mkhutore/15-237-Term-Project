@@ -1,4 +1,4 @@
-var gameStatus = function(statusType, statusHandler, battlefield, scale){
+var gameStatus = function(statusType, statusHandler, battlefield, scale, actions){
 	this.statusType = statusType;
 	this.battlefield = battlefield;
 	this.statusHandler = statusHandler;
@@ -8,6 +8,7 @@ var gameStatus = function(statusType, statusHandler, battlefield, scale){
 	this.scale = scale;
 	this.testVal = 1;
 	this.imgList = [];
+	this.actions = actions;
 	this.initStatus();
 	if (this.statusHandler.lines[2] !== 'None'){
 		this.menurls = this.statusHandler.lines[2].split(';');
@@ -16,7 +17,6 @@ var gameStatus = function(statusType, statusHandler, battlefield, scale){
 	else{
 		this.menus = [];
 	}
-
 }
 
 gameStatus.prototype.initStatus = function(){
@@ -46,6 +46,9 @@ gameStatus.prototype.getButtonList = function(){
 	if(this.buttons === "None" || this.buttons.slice(0,4) === "None"){
 		return [];
 	}
+	else if(this.statusType === 'attackView'){
+		return this.getAttackButtons();
+	}
 	else{
 		len = this.buttonDirectory.length;
 		buttonList = []
@@ -59,6 +62,7 @@ gameStatus.prototype.getButtonList = function(){
 		if(this.statusType === 'deployView'){
 			buttonList = this.getShipButtons(buttonList);
 		}
+		
 		return buttonList;
 	}
 }
@@ -74,6 +78,22 @@ gameStatus.prototype.getShipButtons = function(buttonList){
 		buttonConfig = buttonHandler.createButtonConfig();
 		shipButton = new gameButton(buttonConfig, this.scale, preLen + i);
 		buttonList.push(shipButton);
+	}
+	return buttonList;
+}
+
+gameStatus.prototype.getAttackButtons = function(){
+	var buttonHandler, buttonConfig, button;
+	var buttonList = [];
+	var ship = this.actions.active.ship;
+	console.log(ship.atkList);
+	for(var i = 0; i < ship.atkList.length; i++)
+	{
+		buttonHandler = new TextHandler('/textfiles/Buttons/chooseAttack.txt');
+		buttonConfig = buttonHandler.createButtonConfig();
+		buttonConfig.dy = buttonConfig.dy + i * 50;
+		button = new gameButton(buttonConfig, this.scale, i);
+		buttonList.push(button);
 	}
 	return buttonList;
 }
@@ -133,6 +153,9 @@ gameStatus.prototype.drawData = function(scaledPage, actions){
 			this.drawShipData(scaledPage, actions.deploy);
 		}
 	}
+	else if(this.statusType === "attackView"){
+		this.drawAttackList(scaledPage, actions.active.ship);
+	}
 }
 
 gameStatus.prototype.drawShipData = function(scaledPage, deploy){
@@ -158,6 +181,19 @@ gameStatus.prototype.drawShipTextData = function(scaledPage, config){
 	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 3;
 	startY = (scaledPage.canvas.height() / scaledPage.scale) / 5;
 	scaledPage.drawStatText(config.shipName, leftX, startY);
+}
+
+gameStatus.prototype.drawAttackList = function(scaledPage, ship){
+	var leftX, startY, rightX, text;
+	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 3.8;
+	
+	for(var i = 0; i < ship.atkList.length; i++)
+	{
+		text = ship.atkList[i].atkName;
+		text += ": " + ship.atkList[i].atkPower + " Power, " + ship.atkList[i].atkBPower + " Shield Damage";
+		startY = (72 + i * 59) / scaledPage.scale;
+		scaledPage.drawAttackText(text, leftX, startY);
+	}
 }
 
 gameStatus.prototype.imageCheck = function(config){

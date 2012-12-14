@@ -59,6 +59,21 @@ ScaledPage.prototype.drawStatText = function(status, x, y, font){
     }
 }
 
+ScaledPage.prototype.drawAttackText = function(status, x, y, font){
+    if(font !== undefined){
+        this.page.font = font;
+    }
+    else{
+        this.page.font = "18px Arial";
+    }
+    this.page.textAlign = "left";
+    this.page.fillStyle = "white";
+    this.page.fillText(status, x, y);
+    if(this.testVal > 0){
+        this.testVal--;
+    }
+}
+
 ScaledPage.prototype.drawButtonText = function(x, y, width, height, text){
     var font, fontSize, textX, textY;
     fontSize = (((width + height)/2) * this.scale)/5;
