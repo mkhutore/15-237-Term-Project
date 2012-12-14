@@ -4,6 +4,6 @@ captainMove
 200
 43
 images/Buttons/MoveDown.png
-To moveView
+false
 images/Buttons/Move.png
 captainView:moveView

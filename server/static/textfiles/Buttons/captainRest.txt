@@ -1,0 +1,9 @@
+captainRest
+110
+200
+200
+43
+images/Buttons/RestDown.png
+false
+images/Buttons/Rest.png
+captainView:endTurn

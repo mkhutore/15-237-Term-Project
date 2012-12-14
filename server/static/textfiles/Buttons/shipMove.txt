@@ -1,0 +1,9 @@
+shipMove
+110
+90
+200
+43
+images/Buttons/MoveDown.png
+false
+images/Buttons/Move.png
+shipView:moveView

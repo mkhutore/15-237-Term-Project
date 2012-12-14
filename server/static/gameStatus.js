@@ -5,6 +5,7 @@ var gameStatus = function(statusType, statusHandler, battlefield, scale, actions
 	this.spacejectCheck = this.statusHandler.lines[0]
 	this.buttons = this.statusHandler.lines[1];
 	this.buttonDirectory = this.statusHandler.lines[1].split(';');
+	this.myTurn = battlefield.myTurn;
 	this.scale = scale;
 	this.testVal = 1;
 	this.imgList = [];
@@ -56,19 +57,21 @@ gameStatus.prototype.getButtonList = function(){
 			direct = '/textfiles/Buttons/' + this.buttonDirectory[i];
 			buttonHandler = new TextHandler(direct)
 			buttonConfig = buttonHandler.createButtonConfig();
-			newButton = new gameButton(buttonConfig, this.scale, i);
-			buttonList.push(newButton);
+			if ((buttonConfig.displayText !== 'false') || (this.myTurn === true
+				 && (this.actions.clickedPlayer === this.battlefield.user))){
+				newButton = new gameButton(buttonConfig, this.scale, i);
+				buttonList.push(newButton);
+			}
 		}
 		if(this.statusType === 'deployView'){
 			buttonList = this.getShipButtons(buttonList);
 		}
-		
 		return buttonList;
 	}
 }
 
 gameStatus.prototype.getShipButtons = function(buttonList){
-	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler, preLen;
+	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler, preLen, coords;
 	preLen = buttonList.length;
 	coords = this.battlefield.getCurrentCaptainCoords();
 	currentCaptain = this.battlefield.fieldData[coords[0]][coords[1]];
