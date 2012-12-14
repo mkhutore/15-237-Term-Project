@@ -186,7 +186,7 @@ gameStatus.prototype.drawShipTextData = function(scaledPage, config){
 	startY = (scaledPage.canvas.height() / scaledPage.scale) / 6;
 	centerX = (scaledPage.canvas.width() / scaledPage.scale) / 3.3;
 	rightX = (scaledPage.canvas.width() / scaledPage.scale) * 5 / 8;
-	nameFont = (20*scaledPage.scale).toString() + 'px Impact'
+	nameFont = (11*scaledPage.scale).toString() + 'px Impact';
 	margin = 20;
 	scaledPage.drawStatText(config.shipName, leftX, startY+40, 'center', nameFont); // draws name
 	scaledPage.drawStatText('Class: ' + config.shipClass, centerX, startY, 'left');

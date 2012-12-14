@@ -1,7 +1,7 @@
-Test Captain 1
+KnightCaptain
 Knight
 Captain
-200
+300
 MaxCannon
 4
 50
@@ -14,6 +14,6 @@ False
 0
 100
 20
-TestShip
+Giant_Reaper_2EN;Squire20
 3
 Captain.txt

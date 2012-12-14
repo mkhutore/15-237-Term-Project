@@ -9,7 +9,7 @@ SpaceGame.prototype.setup = function(){
     window.util.patchRequestAnimationFrame();
     window.util.patchFnBind();
 	
-	this.socket = io.connect('http://localhost.com:3000/');
+	this.socket = io.connect("http://spacegame.netgameonline.com:3000/");
 	this.socket.on("newTurn", function(data){
 		if(data.id === this.getSessionCookie()["id"] && data.user !== this.user)
 		{

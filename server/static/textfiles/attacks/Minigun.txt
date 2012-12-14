@@ -1,6 +1,6 @@
-Double Shot
-50
-5
+Minigun
+30
+10
 None
 None
 Square:2
