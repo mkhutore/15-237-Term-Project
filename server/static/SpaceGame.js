@@ -193,7 +193,7 @@ SpaceGame.prototype.handlePointer = function(){
 			if(clickables[i].typeName === "SpaceJect")
 			{
 				this.actions.active = clickables[i];
-				console.log("Active: " + this.actions.active.typeName);
+				//console.log("Active: " + this.actions.active.typeName);
 			}
             this.changeAnimation(clickables[i], true);
             this.pointed.handled = true;
@@ -203,7 +203,6 @@ SpaceGame.prototype.handlePointer = function(){
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
                     this.battlefield, currentScale); 
-				console.log(this.currentStatus.statusType);
                 this.pointed.handled = true;
                 this.released.handled = true;
             }
@@ -242,7 +241,6 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 			this.pointed.handled = true;
 		}
 	}
-	console.log(this.battlefield.spacejectList);
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
     }

@@ -6,6 +6,7 @@ var Battlefield = function(config, user){
 	this.player2 = config.player2;
 	console.log(user, 'is user');
 	this.user = user;
+	this.scale = config.scale;
 	this.sqLength = Math.min(this.width, this.height) / this.gridVal;
 	this.fieldRows = this.width/this.sqLength;
 	this.fieldCols = this.height/this.sqLength;
@@ -62,8 +63,11 @@ Battlefield.prototype.initField = function(config){
 }
 
 Battlefield.prototype.initCaptains = function(){
-	var shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2, 'player' : this.player1}
-	var shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2, 'player': this.player2}
+	var sqLength, scale, shipone, shiptwo;
+	sqLength = this.sqLength;
+	scale = this.scale;
+	shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2, 'player' : this.player1, 'scale': scale, 'sqLength':sqLength}
+	shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2, 'player': this.player2, 'scale': scale, 'sqLength':sqLength}
 	cptFile1 = '/textfiles/shipsdata/CaptainShips/TestCaptain1.txt'
 	cptFile2 = '/textfiles/shipsdata/CaptainShips/TestCaptain2.txt'
 	this.shipHandler = new TextHandler(cptFile1);
@@ -148,8 +152,8 @@ Battlefield.prototype.move = function(ship, coords){
 		{
 			this.spacejectList[i].gridXLocation = newx;
 			this.spacejectList[i].gridYLocation = newy;
-			/* this.spacejectList[i].dimensions = this.spacejectList[i].createDimensions(newx, newy, 
-						this.spacejectList[i].cscale, this.spacejectList[i].sqLength); */
+			this.spacejectList[i].dimensions = this.spacejectList[i].createDimensions(newx, newy, 
+						this.spacejectList[i].cscale, this.spacejectList[i].sqLength);
 		}
 	}
 	console.log(this.spacejectList);

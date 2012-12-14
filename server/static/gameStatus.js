@@ -93,22 +93,18 @@ gameStatus.prototype.initFieldView = function(){
 
 gameStatus.prototype.createClickables = function(spacejects, buttons,
 	SPEH){ //SPEH = spaceject extra handler
-	var newClick;
-	var clickables = [];
-	var i;
-	var statusKey;
+	var newClick, clickables, i, statusKey;
+	clickables = [];
 	for(i=0; i<spacejects.length;i++){
 		newClick = new Clickable(spacejects[i], SPEH);
-
 		clickables.push(newClick);
-		console.log(spacejects[i], newClick);
 	}
 	for(i=0;i<buttons.length;i++){
 		cButton = buttons[i];
 		newClick = new Clickable(buttons[i]);
 		clickables.push(newClick);
 	}
-	this.clickables = clickables;
+	this.clickables = clickables.slice(0);
 }
 
 //Draw
