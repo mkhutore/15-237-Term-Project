@@ -12,7 +12,7 @@ var SpaceJect = function(config){
 		this.cscale = config.scale;
 		this.statusKey = config.statusKey; // gotten from texthandler
 		this.sqLength = config.sqLength;
-		this.dimensions = this.createDimensions();
+		this.dimensions = this.createDimensions(this.gridXLocation, this.gridYLocation, this.cscale, this.sqLength);
 		this.changeKey = {};
 	}
 }
@@ -21,12 +21,12 @@ SpaceJect.prototype.draw = function(scaledPage, x, y, sqLength){
 	this.dimensions = scaledPage.spaceShip(x, y, this.img, sqLength);
 }
 
-SpaceJect.prototype.createDimensions = function(){
+SpaceJect.prototype.createDimensions = function(xloc, yloc, scale, len){
 	var x, y, w, l, dimensions;
-	x = this.gridXLocation*this.cscale;
-	y = this.gridYLocation*this.cscale;
-	w = this.sqLength*this.cscale;
-	l = this.sqLength*this.cscale;
+	x = xloc * scale;
+	y = yloc * scale;
+	w = len * scale;
+	l = len * scale;
 	dimensions = {'dx' : x, 'dy' : y, 'xLength' : w, 'yLength' : l};
 	return dimensions;
 }

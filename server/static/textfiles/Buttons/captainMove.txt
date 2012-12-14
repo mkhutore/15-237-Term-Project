@@ -1,0 +1,9 @@
+captainMove
+110
+145
+200
+43
+images/Buttons/MoveDown.png
+To moveView
+images/Buttons/Move.png
+captainView:moveView

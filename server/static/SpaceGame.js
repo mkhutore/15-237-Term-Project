@@ -188,14 +188,20 @@ SpaceGame.prototype.handlePointer = function(){
         this.actionCheck(rx, ry);
     }
     for(i=0;i<clickables.length;i++){
-        if (clickables[i].clickCheck(px, py)){
-                this.changeAnimation(clickables[i], true);
-                this.pointed.handled = true;
+		if (clickables[i].clickCheck(px, py)){
+			if(clickables[i].typeName === "SpaceJect")
+			{
+				this.actions.active = clickables[i];
+				console.log("Active: " + this.actions.active.typeName);
+			}
+            this.changeAnimation(clickables[i], true);
+            this.pointed.handled = true;
             if(clickables[i].clickCheck(rx, ry) && this.released.handled === false){
                 var statusType = clickables[i].statusKey[currentStatusType];
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
                     this.battlefield, currentScale); 
+				console.log(this.currentStatus.statusType);
                 this.pointed.handled = true;
                 this.released.handled = true;
             }
@@ -209,20 +215,36 @@ SpaceGame.prototype.handlePointer = function(){
         if(this.checkMenu(px, py, rx, ry)){
             this.pointed.handled = true;
             this.released.handled = true;
-            }
-
         }
     }
+}
 
 SpaceGame.prototype.actionCheck = function(rx, ry){
-    if(this.currentStatus.statusType === 'shipMove'){
-        alert("Movin!");
+    if(this.currentStatus.statusType === 'moveView'){
+		console.log(this.battlefield.spacejectList);
+		var activeShip = this.actions.active.ship;
+		
+		var newCoords = this.battlefield.getFieldCoords(rx / this.currentStatus.scale, ry / this.currentStatus.scale);
+		var distance = Math.abs(newCoords[0] - activeShip.gridXLocation) + Math.abs(newCoords[1] - activeShip.gridYLocation);
+		var speed = activeShip.speed;
+		
+		if(distance <= speed)
+		{
+			this.battlefield.move(activeShip, newCoords);
+			
+			var file = '/textfiles/statuses/FieldView.txt';
+			var statusHandler = new TextHandler(file);
+			this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield, this.currentStatus.scale);
+			//console.log(this.battlefield.spacejectList, this.currentStatus.battlefield.spacejectList);
+			this.released.handled = true;
+			this.pointed.handled = true;
+		}
     }
+	console.log(this.battlefield.spacejectList);
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
     }
 }
-
 
 SpaceGame.prototype.changeAnimation = function(clicked, changebool){
     var shorter, lIndex;

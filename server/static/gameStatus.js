@@ -80,7 +80,7 @@ gameStatus.prototype.getShipButtons = function(buttonList){
 
 gameStatus.prototype.initFieldView = function(){
 	var spacejectList, spacejectCheck;
-	spacejectCheck = this.spacejectCheck.slice(0,this.spacejectCheck.length-1);
+	spacejectCheck = whiteSpaceCheck(this.spacejectCheck);
 	if(spacejectCheck  === 'true'){
 		spacejectList = this.battlefield.spacejectList;
 	}
@@ -101,6 +101,7 @@ gameStatus.prototype.createClickables = function(spacejects, buttons,
 		newClick = new Clickable(spacejects[i], SPEH);
 
 		clickables.push(newClick);
+		console.log(spacejects[i], newClick);
 	}
 	for(i=0;i<buttons.length;i++){
 		cButton = buttons[i];

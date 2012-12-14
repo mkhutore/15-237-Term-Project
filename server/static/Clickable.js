@@ -18,6 +18,9 @@ var Clickable = function(clickedObject, SPEH){
 		this.statusKey = clickedObject.statusKey;
 	}
 	this.changeKey = clickedObject.changeKey;
+	if(clickedObject.typeName === "SpaceJect" && clickedObject.shipName !== undefined){
+		this.ship = clickedObject;
+	}
 }
 
 Clickable.prototype.clickCheck = function(cx, cy){
