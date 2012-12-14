@@ -59,7 +59,8 @@ Battlefield.prototype.createField = function(){
 
 Battlefield.prototype.initField = function(config){
 	this.initCaptains();
-	this.createShip(0, 0, config.scale);
+	ship = 'TestShip';
+	//this.createShip(ship, 0, 0, config.scale);
 }
 
 Battlefield.prototype.initCaptains = function(){
@@ -83,7 +84,17 @@ Battlefield.prototype.initCaptains = function(){
 	this.spacejectList.push(this.fieldData[this.fieldRows-1][this.gridVal/2])
 }
 
-Battlefield.prototype.getCurrentCaptain = function(){
+Battlefield.prototype.getCurrentCaptainCoords = function(){
+	var i, j;
+	for(i=0;i<this.fieldRows;i++){
+		for(j=0;j<this.fieldCols;j++){
+			if(this.fieldData[i][j] !== 0){
+				if((this.fieldData[i][j].shipClass === 'Captain') && (this.fieldData[i][j].player === this.user)){
+					return [i, j];
+				}
+			}
+		}
+	}
 	if(this.captain1.player === this.user){
 		return this.captain1;
 	}
@@ -92,9 +103,36 @@ Battlefield.prototype.getCurrentCaptain = function(){
 	}
 }
 
-Battlefield.prototype.createShip = function(bx, by, scale){
+Battlefield.prototype.deployCheck = function(config, sx, sy){
+	var checker = true;
+	currentCaptainCoords = this.getCurrentCaptainCoords();
+	checker = this.checkCoords(sx, sy) && checker;
+	checker = this.costCheck(currentCaptainCoords, config.cost) && checker;
+	checker = this.deploysCheck(currentCaptainCoords) && checker;
+	return checker;
+}
+
+Battlefield.prototype.costCheck = function(coords, cost){
+	if(cost > this.fieldData[coords[0]][coords[1]].energy){
+		return false;
+	}
+	else{
+		return true;
+	}
+}
+
+Battlefield.prototype.deploysCheck = function(coords){
+	if(this.fieldData[coords[0]][coords[1]].deployed >= 3){
+		return false;
+	}
+	else{
+		return true;
+	}
+}
+
+Battlefield.prototype.createShip = function(ship, bx, by, scale){
 	if(this.fieldData[bx][by] === 0){
-	var file = '/textfiles/shipsdata/TestShip.txt';
+	var file = '/textfiles/shipsdata/' + ship + '.txt';
 	baseConfig = {'gridXLocation' : bx, 'gridYLocation': by,
 		'textType' : "Ship", 'file' : file, 'scale' : scale,
 		'sqLength' : this.sqLength };
@@ -103,7 +141,16 @@ Battlefield.prototype.createShip = function(bx, by, scale){
 	var newShip = new Ship(this.shipConfig);
 	this.fieldData[bx][by] = newShip;
 	this.spacejectList.push(newShip);
+	var coords = this.getCurrentCaptainCoords();
+	coordsX = coords[0];
+	coordsY = coords[1];
+	this.fieldData[coordsX][coordsY].energy -= newShip.cost;
+	this.fieldData[coordsX][coordsY].deploys++;
 }
+}
+
+Battlefield.prototype.checkCoords = function(bx, by){
+	return (this.fieldData[bx][by] === 0)
 }
 
 

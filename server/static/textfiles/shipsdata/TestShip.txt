@@ -2,7 +2,7 @@ Test Ship
 Knight
 Bulky
 200
-MaxCannon
+MaxCannon;MaxCannon
 4
 50
 15

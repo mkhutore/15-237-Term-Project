@@ -1,6 +1,6 @@
 TestShip
 120
-30
+35
 200
 43
 images/ShipButtons/GiantReaper2ENDown.png

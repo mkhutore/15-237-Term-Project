@@ -1,10 +1,10 @@
 DeployReject
-350
-230
-200
-43
-images/Buttons/BackDown.png
+140
+265
+40
+33
+images/Buttons/CancelDown.png
 To FieldView
-images/Buttons/Back.png
-deployView:deployStatView
+images/Buttons/Cancel.png
+deployStatView:deployView
 captainView:testText

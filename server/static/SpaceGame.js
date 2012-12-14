@@ -104,7 +104,7 @@ SpaceGame.prototype.onClickStart = function(event){ //this.pointed calls the cur
     /* console.log('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
             + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
             + this[differ].x + ',' + this[differ].y + ',' + this[differ].handled); */
-    console.log(this[differ]);
+    //console.log(this[differ]);
 }
 
 SpaceGame.prototype.onClickEnd = function(event){ //this.pointed calls the current pointed
@@ -127,7 +127,7 @@ SpaceGame.prototype.onClickEnd = function(event){ //this.pointed calls the curre
     /* console.log('Cursor at ' + event.pageX + ', ' + event.pageY + '\n Offset '
             + $(this.canvas).offset().left + ', ' + $(this.canvas).offset().top + '\n Pointed ='
             + this[differ].x + ',' + this[differ].y + ',' + this[differ].handled); */
-    console.log(this[differ]);
+    //console.log(this[differ]);
 }
 
 SpaceGame.prototype.initAccelerometer = function(){
@@ -157,6 +157,9 @@ SpaceGame.prototype.draw = function(timeDiff){
             this.currentStatus.drawMenus(this.page);
             this.currentStatus.drawData(this.page, this.actions);
             this.currentStatus.drawButtons(this.page);
+            if(currentStatus === 'captainView'){
+                this.page.drawStatText(this.battlefield.fieldData[17][4].energy, 200, 200, 'center');
+            }
 
         }
         if (this.actions !== undefined && this.actions.dtext !== undefined){
@@ -199,6 +202,9 @@ SpaceGame.prototype.handlePointer = function(){
             this.pointed.handled = true;
             if(clickables[i].clickCheck(rx, ry) && this.released.handled === false){
                 this.buttonCheck(currentStatusType, clickables[i]);
+                if(currentStatusType === 'deployShipView'){
+                    console.log(clickables[i].statusKey);
+                }
                 var statusType = clickables[i].statusKey[currentStatusType];
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
@@ -222,7 +228,6 @@ SpaceGame.prototype.handlePointer = function(){
 
 SpaceGame.prototype.actionCheck = function(rx, ry){
     if(this.currentStatus.statusType === 'moveView'){
-		console.log(this.battlefield.spacejectList);
 		var activeShip = this.actions.active.ship;
 		
 		var newCoords = this.battlefield.getFieldCoords(rx / this.currentStatus.scale, ry / this.currentStatus.scale);
@@ -241,6 +246,23 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 			this.pointed.handled = true;
 		}
 	}
+    else if(this.currentStatus.statusType === 'deployShipView'){
+        var newCoords = this.battlefield.getFieldCoords(rx / this.currentStatus.scale, ry / this.currentStatus.scale);
+        var shipName = this.actions.deploy;
+        var shipHandler = new TextHandler('/textfiles/shipsdata/'+ shipName + '.txt');
+        var baseConfig = {'gridXLocation' : newCoords[0], 'gridYLocation': newCoords[1],
+        'textType' : "Ship", 'file' : file, 'scale' : this.page.scale,
+        'sqLength' : this.battlefield.sqLength, 'player' : this.user }
+        var shipConfig = shipHandler.createShipConfig(baseConfig);
+        if(this.battlefield.deployCheck(shipConfig, newCoords[0], newCoords[1])){
+            this.battlefield.createShip(shipName, newCoords[0], newCoords[1], this.page.scale);
+            var file = '/textfiles/statuses/FieldView.txt';
+            var statusHandler = new TextHandler(file);
+            this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield, this.currentStatus.scale);
+            this.released.handled = true;
+            this.pointed.handled = true;
+        }
+    }
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
     }

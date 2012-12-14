@@ -7,6 +7,7 @@ var captainShip = function(config){
 	this.deploys = config.deploys;
 	this.deployRange = config.deployRange;
 	this.toStatus = this.shipName;
+	this.deployed = 0;
 
 }
 

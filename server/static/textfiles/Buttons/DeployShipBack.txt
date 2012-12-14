@@ -1,0 +1,10 @@
+DeployShipBack
+600
+260
+200
+43
+images/Buttons/BackDown.png
+To FieldView
+images/Buttons/Back.png
+deployShipView:deployStatView
+captainView:testText

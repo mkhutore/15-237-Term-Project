@@ -1,10 +1,10 @@
 DeployConfirm
-120
-230
-200
-43
-images/Buttons/DeployDown.png
+100
+265
+40
+33
+images/Buttons/ConfirmDown.png
 To FieldView
-images/Buttons/Deploy.png
-deployView:deployStatView
+images/Buttons/Confirm.png
+deployStatView:deployShipView
 captainView:testText

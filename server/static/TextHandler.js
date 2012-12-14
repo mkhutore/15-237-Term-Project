@@ -51,10 +51,7 @@ TextHandler.prototype.createKeyConfig = function(line){
     for(j=0;j<prekey.length;j++){
       temp = prekey[j];
       tempLen = temp.length;
-      if(!withinDims(temp.charCodeAt(tempLen-1),65,122)) //removes whitespace
-      {
-        prekey[j] = temp.slice(0,temp.length-1);
-      }
+    prekey[j] = whiteSpaceCheck(prekey[j]);
     }
     key[prekey[0]] = prekey[1]; //the prekey will always have two sections
   }

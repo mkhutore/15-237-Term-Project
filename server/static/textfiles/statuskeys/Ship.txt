@@ -1,1 +1,1 @@
-FieldView:shipView
+FieldView:shipView;deployShipView:deployStatView

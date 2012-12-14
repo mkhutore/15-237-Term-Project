@@ -66,7 +66,8 @@ gameStatus.prototype.getButtonList = function(){
 gameStatus.prototype.getShipButtons = function(buttonList){
 	var shipButtons, shipButton, len, i, buttonConfig, buttonHandler, preLen;
 	preLen = buttonList.length;
-	currentCaptain = this.battlefield.getCurrentCaptain();
+	coords = this.battlefield.getCurrentCaptainCoords();
+	currentCaptain = this.battlefield.fieldData[coords[0]][coords[1]];
 	shipButtons = currentCaptain.deploys;
 	len = shipButtons.length;
 	for(i=0;i<len;i++){
@@ -147,17 +148,46 @@ gameStatus.prototype.drawShipData = function(scaledPage, deploy){
 
 gameStatus.prototype.drawShipImage = function(scaledPage, config){
 	boxHeight = 60;
-	centerX = (scaledPage.canvas.width() / scaledPage.scale) / 4;
-	centerY = (scaledPage.canvas.height() / scaledPage.scale) / 3;
+	centerX = (scaledPage.canvas.width() / scaledPage.scale) / 6.7;
+	centerY = (scaledPage.canvas.height() / scaledPage.scale) / 2.2;
 	img = this.imageCheck(config);
 	scaledPage.spaceShip(centerX, centerY, img, boxHeight);
 }
 
 gameStatus.prototype.drawShipTextData = function(scaledPage, config){
-	var leftX, startY, rightX;
-	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 3;
-	startY = (scaledPage.canvas.height() / scaledPage.scale) / 5;
-	scaledPage.drawStatText(config.shipName, leftX, startY);
+	var leftX, startY, centerX, rightX, nameFont, margin;
+	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 5;
+	startY = (scaledPage.canvas.height() / scaledPage.scale) / 6;
+	centerX = (scaledPage.canvas.width() / scaledPage.scale) / 3.3;
+	rightX = (scaledPage.canvas.width() / scaledPage.scale) * 5 / 8;
+	nameFont = (20*scaledPage.scale).toString() + 'px Impact'
+	margin = 20;
+	scaledPage.drawStatText(config.shipName, leftX, startY+40, 'center', nameFont); // draws name
+	scaledPage.drawStatText('Class: ' + config.shipClass, centerX, startY, 'left');
+	scaledPage.drawStatText('HP: ' + config.HP, centerX, startY + margin, 'left');
+	this.drawAttackList(scaledPage, rightX, startY, config.atkList, margin, 'center');
+	scaledPage.drawStatText('Shield Power: ' + config.SDStr, centerX, startY + margin*2, 'left');
+	scaledPage.drawStatText('Shield Capacity: ' + config.SDCapac, centerX, startY + margin*3, 'left');
+	scaledPage.drawStatText('Shield Regeneration: ' + config.SDRegen, centerX, startY + margin*4, 'left');
+	scaledPage.drawStatText('Speed: ' + config.speed, centerX, startY + margin*5, 'left');
+	scaledPage.drawStatText('Cost: ' + config.cost, centerX, startY + margin*6, 'left');
+}
+
+gameStatus.prototype.drawAttackList = function(scaledPage, x, y, atkList, margin, align){
+	var i, len, atk, name, power, bpower, range, atkX, atkY, atkFont, text;
+	len = atkList.length;
+	scaledPage.drawStatText('Attacks', x-30, y, 'bold 15px Arial');
+	atkFont = (10*this.scale).toString() + 'px Times'
+	for(i=0;i<len;i++){
+		atkY = y + margin*(i+1);
+		atk = atkList[i];
+		name = atk.atkName;
+		power = atk.atkPower;
+		bpower = atk.atkBPower;
+		range = atk.atkRange;
+		text = whiteSpaceCheck(name) + ": " + power + " Power, " + bpower + " Shield Damage.";
+		scaledPage.drawStatText(text, x, atkY, align, atkFont);
+	}
 }
 
 gameStatus.prototype.imageCheck = function(config){

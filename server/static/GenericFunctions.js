@@ -26,6 +26,9 @@ function whiteSpaceCheck(string){
 	if(string.charCodeAt(len-1) === 13){
 		return string.slice(0,len-1);
 	}
+	if(string.charCodeAt(len-1) === 13){
+		return string.slice(1,len);
+	}
 	else{
 		return string;
 	}

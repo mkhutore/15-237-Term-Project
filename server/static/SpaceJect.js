@@ -23,12 +23,10 @@ SpaceJect.prototype.draw = function(scaledPage, x, y, sqLength){
 
 SpaceJect.prototype.createDimensions = function(xloc, yloc, scale, len){
 	var x, y, w, l, dimensions;
-	console.log(xloc, yloc, scale, len);
 	x = xloc * len * scale;
 	y = yloc * len * scale;
 	w = len * scale;
 	l = len * scale;
 	dimensions = {'dx' : x, 'dy' : y, 'xLength' : w, 'yLength' : l};
-	console.log(dimensions);
 	return dimensions;
 }

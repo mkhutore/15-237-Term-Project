@@ -43,19 +43,22 @@ ScaledPage.prototype.drawDtext = function(status){ //this is a test function!
 
 }
 
-ScaledPage.prototype.drawStatText = function(status, x, y, font){
+ScaledPage.prototype.drawStatText = function(status, x, y, align, font){
     if(font !== undefined){
         this.page.font = font;
     }
     else{
-        this.page.font = "15px Arial";
+        this.page.font = (10*this.scale).toString() + "px Arial";
     }
-    this.page.textAlign = "center";
+    this.page.textAlign = align;
+    if(x > (this.canvas.width() / this.scale)){
+        console.log('asdf');
+    }
     this.page.fillStyle = "white";
-    this.page.fillText(status, x, y);
+    this.page.fillText(status, x*this.scale, y*this.scale);
     if(this.testVal > 0){
         this.testVal--;
-        console.log("SHOULDWORK");
+        //console.log("SHOULDWORK");
     }
 }
 
