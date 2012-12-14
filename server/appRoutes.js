@@ -42,12 +42,29 @@ module.exports = function (app) {
             });
         }
     });
-
-    app.post('/db/me/setMsg', function(req, res){
-        req.user.msg = req.body.msg;
-        req.user.lastMsgTimestamp = new Date();
-        req.user.save();
-        res.send();
+	
+	app.post('/db/save', function(req, res){
+        if (!req.user){
+            res.status(401);
+        }
+        else {
+            Game.findOne({"_id" : req.body.id}, 'player1 player2 objects', 
+                function(err, game){
+                    if (err)
+                        res.send(err);
+                    else if(game)
+					{
+						game.lastPlayedTimestamp = new Date();
+						game.objects = req.body.objects;
+						game.save(function(err){
+							console.log("saving");
+						    if (err) {
+								return res.send({'err': err});
+							}
+						});
+					}
+            });
+        }
     });
 	
 	app.post("/user", function(req, res){
