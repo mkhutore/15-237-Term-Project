@@ -221,7 +221,7 @@ gameStatus.prototype.drawAttackMenuList = function(scaledPage, ship){
 	{
 		text = ship.atkList[i].atkName;
 		text += ": " + ship.atkList[i].atkPower + " Power, " + ship.atkList[i].atkBPower + " Shield Damage";
-		startY = (72 + i * 59) / scaledPage.scale;
+		startY = (62 + i * 50);
 		scaledPage.drawAttackText(text, leftX, startY);
 	}
 }

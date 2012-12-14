@@ -67,11 +67,11 @@ ScaledPage.prototype.drawAttackText = function(status, x, y, font){
         this.page.font = font;
     }
     else{
-        this.page.font = "18px Arial";
+        this.page.font = (18*this.scale).toString() + "px Arial";
     }
     this.page.textAlign = "left";
     this.page.fillStyle = "white";
-    this.page.fillText(status, x, y);
+    this.page.fillText(status, x*this.scale, y*this.scale);
     if(this.testVal > 0){
         this.testVal--;
     }

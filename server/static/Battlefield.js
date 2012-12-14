@@ -190,7 +190,7 @@ Battlefield.prototype.draw = function(scaledPage,status){
 	if(status === 'shipView'){
 		//scaledPage.fillRect(100,100,200,150,'red');
 	}
-	scaledPage.drawStatus(status);
+	//scaledPage.drawStatus(status);
 }
 
 Battlefield.prototype.getFieldCoords = function(x, y){

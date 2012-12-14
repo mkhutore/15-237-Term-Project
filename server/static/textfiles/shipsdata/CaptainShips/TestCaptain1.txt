@@ -2,7 +2,7 @@ Test Captain 1
 Knight
 Captain
 200
-MaxCannon
+MaxCannon;MaxCannon;MaxCannon;MaxCannon
 4
 50
 15
