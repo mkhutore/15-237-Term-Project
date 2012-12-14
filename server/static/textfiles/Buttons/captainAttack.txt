@@ -6,5 +6,5 @@ CaptainAttack
 images/Buttons/AttackDown.png
 To shipView
 images/Buttons/Attack.png
-captainView:FieldView
+captainView:attackView
 captainView:testText

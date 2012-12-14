@@ -12,6 +12,7 @@ var Battlefield = function(config, user){
 	this.fieldCols = this.height/this.sqLength;
 	this.fieldData = this.createField();
 	this.spacejectList = [];
+	this.highlights = [];
 	this.shipHandler;
 	if(config.spacejects.length === 0)
 	{
@@ -157,6 +158,13 @@ Battlefield.prototype.checkCoords = function(bx, by){
 Battlefield.prototype.draw = function(scaledPage,status){
 	var i;
 	var j;
+	for(i = 0; i < this.highlights.length; i++)
+	{
+		var x = this.highlights[i][0];
+		var y = this.highlights[i][1];
+		scaledPage.fillRect(x * this.sqLength, y * this.sqLength, this.sqLength, this.sqLength, this.highlightColor);
+	}
+	
 	for (i=0;i<this.fieldRows;i++)
 	{
 		currentX = i*this.sqLength;
@@ -166,6 +174,12 @@ Battlefield.prototype.draw = function(scaledPage,status){
 			scaledPage.lineRect(currentX, currentY, this.sqLength, this.sqLength);
 			if (this.fieldData[i][j].typeName === "SpaceJect")
 			{
+				var color = "#FFFFFF";
+				if(this.fieldData[i][j].player === this.player1)
+					color = "rgba(178, 44, 170, .5)";
+				else if(this.fieldData[i][j].player === this.player2)
+					color = "rgba(44, 164, 178, .5)";
+				scaledPage.fillRect(i * this.sqLength, j * this.sqLength, this.sqLength, this.sqLength, color);
 				this.fieldData[i][j].draw(scaledPage, currentX, currentY, this.sqLength);
 				if(this.testcounter){
 					this.testcounter = false;
@@ -203,5 +217,79 @@ Battlefield.prototype.move = function(ship, coords){
 						this.spacejectList[i].cscale, this.spacejectList[i].sqLength);
 		}
 	}
-	console.log(this.spacejectList);
+	this.highlights = [];
+}
+
+Battlefield.prototype.remove = function(ship){
+	var x = ship.gridXLocation;
+	var y = ship.gridYLocation;
+	
+	this.fieldData[x][y] = 0;
+	
+	for(var i = 0; i < this.spacejectList.length; i++)
+	{
+		if(this.spacejectList[i].gridXLocation === x && this.spacejectList[i].gridYLocation === y)
+		{
+			this.spacejectList.splice(i, 1);
+		}
+	}
+}
+
+Battlefield.prototype.moveHighlight = function(ship){
+	var highlight = [];
+	var speed = ship.speed;
+	for(var i = -speed; i <= speed; i++)
+	{
+		for(var j = -speed; j <= speed; j++)
+		{
+			var x = ship.gridXLocation + i;
+			var y = ship.gridYLocation + j;
+			if(x >= 0 && x < this.fieldRows && Math.abs(i) + Math.abs(j) <= speed)
+			{
+				if(y >= 0 && y < this.fieldCols && this.fieldData[x][y] === 0)
+					highlight.push([x, y]);
+			}
+		}
+	}
+	this.highlights = highlight;
+	this.highlightColor = "rgba(247, 255, 32, .5)";
+}
+
+Battlefield.prototype.attackHighlight = function(ship, attack){
+	var highlight = [];
+	var range = attack.atkRange[0];
+	console.log(ship);
+	console.log(attack);
+	
+	if(range[0] === "Square")
+	{
+		for(var i = -range[1]; i <= range[1]; i++)
+		{
+			for(var j = -range[1]; j <= range[1]; j++)
+			{
+				var x = ship.gridXLocation + i;
+				var y = ship.gridYLocation + j;
+				if(x >= 0 && x < this.fieldRows && Math.abs(i) + Math.abs(j) <= range[1])
+				{
+					if(y >= 0 && y < this.fieldCols)
+						highlight.push([x, y]);
+				}
+			}
+		}
+	}
+	else if(range[0] === "Line")
+	{
+		for(var i = -range[1]; i <= range[1]; i++)
+		{
+			var x = ship.gridXLocation + i;
+			var y = ship.gridYLocation;
+			highlight.push([x, y]);
+			x -= i;
+			y += i;
+			highlight.push([x, y]);
+		}
+	}
+	
+	this.highlights = highlight;
+	this.highlightColor = "rgba(255, 29, 29, .5)";
 }

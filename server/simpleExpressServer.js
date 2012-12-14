@@ -17,7 +17,7 @@ var io = require('socket.io').listen(3000);
 //      update IP
 //======================================
 
-var options = {
+/* var options = {
   host: 'freedns.afraid.org',
   path: '/dynamic/update.php?VU1vQ2ZhMzFVMVVBQUt1MVE0VUFBQUFGOjg3NTYyMDE='
 };
@@ -26,7 +26,7 @@ http.get(options, function(res) {
   console.log('STATUS: ' + res.statusCode);
 }).on('error', function(e) {
   console.log('ERROR: ' + e.message);
-});
+}); */
 
 //======================================
 //      sockets
