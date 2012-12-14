@@ -122,8 +122,35 @@ Battlefield.prototype.draw = function(scaledPage,status){
 			}
 		}
 	}
-		if(status === 'shipView'){
-			//scaledPage.fillRect(100,100,200,150,'red');
+	if(status === 'shipView'){
+		//scaledPage.fillRect(100,100,200,150,'red');
 	}
 	scaledPage.drawStatus(status);
+}
+
+Battlefield.prototype.getFieldCoords = function(x, y){
+	var fieldX = Math.floor(x / this.sqLength);
+	var fieldY = Math.floor(y / this.sqLength);
+	return [fieldX, fieldY];
+}
+
+Battlefield.prototype.move = function(ship, coords){
+	var oldx = ship.gridXLocation;
+	var oldy = ship.gridYLocation;
+	var newx = coords[0];
+	var newy = coords[1];
+	this.fieldData[oldx][oldy] = 0;
+	this.fieldData[newx][newy] = ship;
+	
+	for(var i = 0; i < this.spacejectList.length; i++)
+	{
+		if(this.spacejectList[i].gridXLocation === oldx && this.spacejectList[i].gridYLocation === oldy)
+		{
+			this.spacejectList[i].gridXLocation = newx;
+			this.spacejectList[i].gridYLocation = newy;
+			/* this.spacejectList[i].dimensions = this.spacejectList[i].createDimensions(newx, newy, 
+						this.spacejectList[i].cscale, this.spacejectList[i].sqLength); */
+		}
+	}
+	console.log(this.spacejectList);
 }
