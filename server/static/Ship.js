@@ -21,6 +21,7 @@ var Ship = function(config){
 		this.defenseMods = config.defenseMods;
 		this.speed = config.speed; //max amount of squares to move per turn
 		this.moved = 0;
+		this.attacked = false;
 		this.CMAA = config.CMAA //can move after attack, boolean
 		this.imgurl = config.imgurl;
 		this.img = new Image();

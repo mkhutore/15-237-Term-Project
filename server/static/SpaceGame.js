@@ -9,7 +9,7 @@ SpaceGame.prototype.setup = function(){
     window.util.patchRequestAnimationFrame();
     window.util.patchFnBind();
 	
-	this.socket = io.connect('http://localhost.com:3000/');
+	this.socket = io.connect("http://spacegame.netgameonline.com:3000/");
 	this.socket.on("newTurn", function(data){
 		if(data.id === this.getSessionCookie()["id"] && data.user !== this.user)
 		{
@@ -39,7 +39,6 @@ SpaceGame.prototype.getData = function(myTurn){
 		if(this.player1 === this.user) this.myTurn = true;
 		else this.myTurn = false;
 		if(myTurn) this.myTurn = true;
-		
 		this.initBattlefield(game.objects, this.player1, this.player2);
 		this.draw();
 		this.initStatus();
@@ -62,7 +61,7 @@ SpaceGame.prototype.getSessionCookie = function(){
 SpaceGame.prototype.initBattlefield = function(objects, player1, player2){
     this.battlefield = new Battlefield({'width':this.width,
      'height':this.height, 'spacejects':objects, 'scale':this.page.scale,
-    'player1' : player1, 'player2': player2}, this.user);
+    'player1' : player1, 'player2': player2}, this.user, this.myTurn);
 }
 
 SpaceGame.prototype.initStatus = function(){
@@ -173,11 +172,27 @@ SpaceGame.prototype.draw = function(timeDiff){
             this.currentStatus.drawData(this.page, this.actions);
             this.currentStatus.drawButtons(this.page);
         if(currentStatus === 'captainView'){
-                this.page.drawStatText(this.battlefield.fieldData[17][4].energy, 200, 200, 'center');
+            this.battlefield.drawCaptainStats(this.page, this.actions.clicked);
+            }
+        if(currentStatus === 'shipView'){
+            this.battlefield.drawShipStats(this.page, this.actions.active.ship);
+        }
+        }
+        if(currentStatus === 'endTurn'){
+            this.endTurn();
+            this.initStatus();
+        }
+        if (this.actions !== undefined){
+            if (this.actions.err !== undefined && this.actions.errCount > 0){  
+            this.page.drawError(this.actions.err);
+            this.actions.errCount--;
             }
         }
-        if (this.actions !== undefined && this.actions.dtext !== undefined){
-            this.page.drawDtext(this.actions.dtext);
+        if(this.battlefield.captainDeadCheck()){
+            var statusType = 'GameOver';
+            var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
+            this.currentStatus = new gameStatus(statusType, statusHandler, this.battlefield,
+            this.page.scale, this.actions);
         }
 	}
 }
@@ -219,6 +234,10 @@ SpaceGame.prototype.handlePointer = function(){
                 if(currentStatusType === 'deployShipView'){
                     console.log(clickables[i].statusKey);
                 }
+                this.actions.clicked = clickables[i];
+                if(clickables[i].player !== undefined){
+                    this.actions.clickedPlayer = clickables[i].player;
+                }
                 var statusType = clickables[i].statusKey[currentStatusType];
                 var statusHandler = new TextHandler('/textfiles/statuses/' + statusType + '.txt');
                 this.currentStatus = new gameStatus(statusType, statusHandler,
@@ -231,6 +250,9 @@ SpaceGame.prototype.handlePointer = function(){
 				else if(this.currentStatus.statusType === "targetView"){
 					this.battlefield.attackHighlight(this.actions.active.ship, this.actions.attack);
 				}
+                else if(this.currentStatus.statusType === "deployShipView"){
+                    this.battlefield.deployHighlight(this.actions.active.ship);
+                }
             }
             else if(this.released.handled === false){
                 this.changeAnimation(clickables[i], false);
@@ -274,12 +296,17 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
         var shipConfig = shipHandler.createShipConfig(baseConfig);
         if(this.battlefield.deployCheck(shipConfig, newCoords[0], newCoords[1])){
             this.battlefield.createShip(shipName, newCoords[0], newCoords[1], this.page.scale);
+        }
+        else{
+            this.actions.err = "You cannot create a ship there!"
+            this.actions.errCount = 85;
+        }
+            this.battlefield.highlights = [];
             var file = '/textfiles/statuses/FieldView.txt';
             var statusHandler = new TextHandler(file);
             this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield, this.currentStatus.scale);
             this.released.handled = true;
             this.pointed.handled = true;
-        }
     }
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
@@ -323,15 +350,26 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 		}
 		if(inRange && this.battlefield.fieldData[atkCoords[0]][atkCoords[1]] !== 0)
 		{
+            if(!activeShip.attacked){
+            var cx = activeShip.gridXLocation;
+            var cy = activeShip.gridYLocation;
+            this.battlefield.fieldData[cx][cy].attacked = true;
 			this.actions.target = this.battlefield.fieldData[atkCoords[0]][atkCoords[1]];
 			this.attack();
-			
+			}
+            else{
+                this.actions.err = "Attack Limit Reached!"
+                this.actions.errCount = 100;
+                this.battlefield.highlights = [];
+                console.log(this.actions);
+            }
 			var file = '/textfiles/statuses/FieldView.txt';
 			var statusHandler = new TextHandler(file);
 			this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield, this.currentStatus.scale);
 			this.released.handled = true;
 			this.pointed.handled = true;
-		}
+        }
+
 	}
 }
 
@@ -417,6 +455,41 @@ SpaceGame.prototype.testText = function(){
 
 SpaceGame.prototype.nullText = function(){
     this.actions.dtext = undefined;
+}
+
+SpaceGame.prototype.endTurn = function(){
+    this.resetStats();
+    this.myTurn = false;
+    this.battlefield.myTurn = false;
+    console.log(this.myTurn);
+    this.save;
+}
+
+SpaceGame.prototype.resetStats = function(){
+    var i, len, spacejects;
+    spacejects = this.battlefield.spacejectList.slice(0);
+    len = spacejects.length;
+    for(i=0;i<len;i++){
+        ject = spacejects[i];
+        ject = this.resetShipStats(ject);
+        if(ject.shipClass === "Captain"){
+            ject = this.resetCaptainStats(ject);
+        }
+        spacejects[i] = ject;
+    }
+}
+
+SpaceGame.prototype.resetShipStats = function(ject){
+    ject.moved = 0;
+    ject.attacked = false;
+    ject.currentSDCapac = Math.min(ject.currentSDCapac + ject.SDRegen, ject.maxSDCapac);
+    return ject;
+}
+
+SpaceGame.prototype.resetCaptainStats = function(ject){
+    ject.energy += ject.energyRegen;
+    ject.deployed = 0;
+    return ject;
 }
 // make sure to set myTurn = false when you end the turn
 SpaceGame.prototype.save = function(){

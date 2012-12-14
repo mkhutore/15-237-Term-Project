@@ -163,7 +163,7 @@ TextHandler.prototype.createButtonConfig = function(){
   else{
     config.altImgurl = this.lines[5];
   }
-  config.displayText = this.lines[6];
+  config.displayText = whiteSpaceCheck(this.lines[6]); //true or false, determines if clickable on not-turn
   if(this.lines[7][0] === '#'){
     config.bColor = this.lines[7];
   }

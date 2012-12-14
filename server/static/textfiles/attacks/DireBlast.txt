@@ -1,0 +1,6 @@
+Dire Blast
+50
+5
+None
+None
+Square:1

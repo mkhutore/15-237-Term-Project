@@ -1,0 +1,10 @@
+Giant_Reaper_2EN
+120
+35
+200
+43
+images/ShipButtons/GiantReaper2ENDown.png
+To FieldView
+images/ShipButtons/GiantReaper2EN.png
+captainView:FieldView;deployView:deployStatView
+captainView:testText

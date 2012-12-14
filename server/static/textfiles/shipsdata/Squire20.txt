@@ -1,0 +1,15 @@
+Squire 2.0
+Knight
+Basic
+75
+Minigun;DireBlast
+2
+30
+5
+None
+None
+5
+False
+/images/Spaceships/Cruiser.png
+40
+Ship.txt

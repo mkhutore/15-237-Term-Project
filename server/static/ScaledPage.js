@@ -43,6 +43,15 @@ ScaledPage.prototype.drawDtext = function(status){ //this is a test function!
 
 }
 
+ScaledPage.prototype.drawError = function(err){
+    x = this.canvas.width() / 2;
+    y = this.canvas.height() / this.scale / 2;
+    this.page.font = (48*this.scale).toString() + "px Times";
+    this.page.fillStyle = "#F40000";
+    this.page.textAlign = 'center';
+    this.page.fillText(err, x, y);
+}
+
 ScaledPage.prototype.drawStatText = function(status, x, y, align, font){
     if(font !== undefined){
         this.page.font = font;

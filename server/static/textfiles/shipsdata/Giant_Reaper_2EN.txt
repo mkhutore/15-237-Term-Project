@@ -2,7 +2,7 @@ Giant Reaper 2EN
 Knight
 Bulky
 200
-MaxCannon;Rockets;TwinBarrels;LaserAxe
+MaxCannon;Rockets;LaserAxe
 4
 50
 15
@@ -10,6 +10,6 @@ None
 None
 4
 False
-/images/ships.gif
+/images/Spaceships/Assaultboat.png
 40
 Ship.txt

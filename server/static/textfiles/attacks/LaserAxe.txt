@@ -1,0 +1,6 @@
+Laser Axe
+100
+20
+None
+None
+Square:1

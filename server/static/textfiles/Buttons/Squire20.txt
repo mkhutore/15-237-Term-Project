@@ -1,0 +1,10 @@
+Squire20
+120
+80
+200
+43
+images/ShipButtons/Squire20Down.png
+To FieldView
+images/ShipButtons/Squire20.png
+captainView:FieldView;deployView:deployStatView
+captainView:testText

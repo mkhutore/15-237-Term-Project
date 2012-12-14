@@ -4,6 +4,6 @@ CaptainDeploy
 200
 43
 images/Buttons/DeployDown.png
-To shipView
+false
 images/Buttons/Deploy.png
 captainView:deployView

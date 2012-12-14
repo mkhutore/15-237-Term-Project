@@ -1,4 +1,4 @@
-var Battlefield = function(config, user){
+var Battlefield = function(config, user, myTurn){
 	this.width = config.width;
 	this.height = config.height;
 	this.gridVal = 8;
@@ -6,6 +6,7 @@ var Battlefield = function(config, user){
 	this.player2 = config.player2;
 	console.log(user, 'is user');
 	this.user = user;
+	this.myTurn = myTurn;
 	this.scale = config.scale;
 	this.sqLength = Math.min(this.width, this.height) / this.gridVal;
 	this.fieldRows = this.width/this.sqLength;
@@ -70,8 +71,8 @@ Battlefield.prototype.initCaptains = function(){
 	scale = this.scale;
 	shipone = {'gridXLocation': 0, 'gridYLocation': this.gridVal/2, 'player' : this.player1, 'scale': scale, 'sqLength':sqLength}
 	shiptwo = {'gridXLocation': this.fieldRows-1, 'gridYLocation': this.gridVal/2, 'player': this.player2, 'scale': scale, 'sqLength':sqLength}
-	cptFile1 = '/textfiles/shipsdata/CaptainShips/TestCaptain1.txt'
-	cptFile2 = '/textfiles/shipsdata/CaptainShips/TestCaptain2.txt'
+	cptFile1 = '/textfiles/shipsdata/CaptainShips/KnightCaptain.txt'
+	cptFile2 = '/textfiles/shipsdata/CaptainShips/KnightCaptain.txt'
 	this.shipHandler = new TextHandler(cptFile1);
 	this.shipConfig = this.shipHandler.createShipConfig(shipone);
 	this.fieldData[0][this.gridVal/2] = new captainShip(this.shipConfig);
@@ -103,6 +104,20 @@ Battlefield.prototype.getCurrentCaptainCoords = function(){
 		return this.captain2;
 	}
 }
+
+Battlefield.prototype.getCaptainCoords = function(player){
+	var i, j;
+	for(i=0;i<this.fieldRows;i++){
+		for(j=0;j<this.fieldCols;j++){
+			if(this.fieldData[i][j] !== 0){
+				if((this.fieldData[i][j].shipClass === 'Captain') && (this.fieldData[i][j].player === player)){
+					return [i, j];
+				}
+			}
+		}
+	}
+}
+
 
 Battlefield.prototype.deployCheck = function(config, sx, sy){
 	var checker = true;
@@ -136,7 +151,7 @@ Battlefield.prototype.createShip = function(ship, bx, by, scale){
 	var file = '/textfiles/shipsdata/' + ship + '.txt';
 	baseConfig = {'gridXLocation' : bx, 'gridYLocation': by,
 		'textType' : "Ship", 'file' : file, 'scale' : scale,
-		'sqLength' : this.sqLength };
+		'sqLength' : this.sqLength, 'player': this.user };
 	this.shipHandler = new TextHandler(file);
 	this.shipConfig = this.shipHandler.createShipConfig(baseConfig);
 	var newShip = new Ship(this.shipConfig);
@@ -146,14 +161,29 @@ Battlefield.prototype.createShip = function(ship, bx, by, scale){
 	coordsX = coords[0];
 	coordsY = coords[1];
 	this.fieldData[coordsX][coordsY].energy -= newShip.cost;
-	this.fieldData[coordsX][coordsY].deploys++;
+	this.fieldData[coordsX][coordsY].deployed++;
 }
 }
 
 Battlefield.prototype.checkCoords = function(bx, by){
-	return (this.fieldData[bx][by] === 0)
+	if(this.fieldData[bx][by] === 0 && this.highlightscheck(bx, by)){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
+Battlefield.prototype.highlightscheck = function(bx, by){
+	var highlights, highlight, len, i;
+	hightlights = this.highlights;
+	len = hightlights.length;
+	for(i=0;i<len;i++){
+		highlight = hightlights[i];
+		if(highlight[0] === bx && highlight[1] === by) return true;
+	}
+	return false;
+}
 
 Battlefield.prototype.draw = function(scaledPage,status){
 	var i;
@@ -191,6 +221,50 @@ Battlefield.prototype.draw = function(scaledPage,status){
 		//scaledPage.fillRect(100,100,200,150,'red');
 	}
 	//scaledPage.drawStatus(status);
+}
+
+Battlefield.prototype.drawCaptainStats = function(scaledPage, clicked){
+	var player, ttext;
+	player = clicked.player;
+	if(player !== undefined){
+		coords = this.getCaptainCoords(player);
+	}
+	else{
+		coords = this.getCurrentCaptainCoords();
+	}
+	var captain = this.fieldData[coords[0]][coords[1]];
+	var ttext1 = 'Current Stats: ';
+	var ttext2 = 'Energy: ';
+	var energy = captain.energy;
+	var ttext3 = '; Remaining deploys: '
+	var deployed = 3 - captain.deployed;
+	var ttext4 = '; Remaining Fuel: ';
+	var fuel = captain.speed - captain.moved;
+	var ttext5 = '; Attacks: ';
+	var attacks = (1 - (captain.attacked*1)).toString();
+	ttext = ttext1 + ttext2 + energy + ttext3 + deployed + ttext4 + fuel + ttext5 + attacks;
+	scaledPage.drawStatText(ttext, 110, 260, 'left');
+	var btext1 = 'HP: ';
+	var HP = captain.currentHP;
+	var btext2 = '; Shield: ';
+	var shield = captain.currentSDCapac;
+	btext = btext1 + HP + btext2 + shield;
+	scaledPage.drawStatText(btext, 110, 280, 'left');
+}
+
+Battlefield.prototype.drawShipStats = function(scaledPage, ship){
+	var player, ttext;
+	var ttext1 = 'Current Stats: ';
+	var ttext2 = 'HP: ';
+	var HP = ship.currentHP;
+	var shield = ship.currentSDCapac;
+	var ttext3 = '; Shield: '
+	var ttext4 = '; Remaining Fuel: ';
+	var fuel = ship.speed - ship.moved;
+	var ttext5 = '; Attacks: ';
+	var attacks = (1 - (ship.attacked*1)).toString();
+	ttext = ttext1 + ttext2 + HP + ttext3 + shield + ttext4 + fuel + ttext5 + attacks;
+	scaledPage.drawStatText(ttext, 110, 260, 'left');
 }
 
 Battlefield.prototype.getFieldCoords = function(x, y){
@@ -253,6 +327,47 @@ Battlefield.prototype.moveHighlight = function(ship){
 	}
 	this.highlights = highlight;
 	this.highlightColor = "rgba(247, 255, 32, .5)";
+}
+
+Battlefield.prototype.deployHighlight = function(ship){
+	var highlight = [];
+	var deployRange = ship.deployRange;
+	for(var i = -deployRange; i <= deployRange; i++)
+	{
+		for(var j = -deployRange; j <= deployRange; j++)
+		{
+			var x = ship.gridXLocation + i;
+			var y = ship.gridYLocation + j;
+			if(x >= 0 && x < this.fieldRows && Math.abs(i) + Math.abs(j) <= deployRange)
+			{
+				if(y >= 0 && y < this.fieldCols && this.fieldData[x][y] === 0)
+					highlight.push([x, y]);
+			}
+		}
+	}
+	this.highlights = highlight;
+	this.highlightColor = "rgba(2, 255, 3, .5)";
+}
+
+Battlefield.prototype.captainDeadCheck = function(){
+	if(this.fieldView !== undefined){
+	var p1coords, p2coords, p1x, p1y, p2x, p2y;
+	p1coords = this.getCaptainCoords(this.player1);
+	p2coords = this.getCaptainCoords(this.player2);
+	p1x = p1coords[0];
+	p1y = p1coords[1];
+	p2x = p2coords[0];
+	p2y = p2coords[1];
+		if(this.fieldView[p1x][p1y].currentHP <= 0 || this.fieldView[p2x][p2y].currentHP <= 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
+	}
 }
 
 Battlefield.prototype.attackHighlight = function(ship, attack){
