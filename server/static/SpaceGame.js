@@ -293,6 +293,7 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 			this.currentStatus = new gameStatus('FieldView', statusHandler, this.battlefield, this.currentStatus.scale);
 			this.released.handled = true;
 			this.pointed.handled = true;
+			this.battlefield.highlights = [];
 			return;
 		}
 		
