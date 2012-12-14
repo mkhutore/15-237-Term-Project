@@ -155,7 +155,7 @@ gameStatus.prototype.drawData = function(scaledPage, actions){
 		}
 	}
 	else if(this.statusType === "attackView"){
-		this.drawAttackList(scaledPage, actions.active.ship);
+		this.drawAttackMenuList(scaledPage, actions.active.ship);
 	}
 }
 
@@ -213,7 +213,7 @@ gameStatus.prototype.drawAttackList = function(scaledPage, x, y, atkList, margin
 	}
 }
 
-gameStatus.prototype.drawAttackList = function(scaledPage, ship){
+gameStatus.prototype.drawAttackMenuList = function(scaledPage, ship){
 	var leftX, startY, rightX, text;
 	leftX = (scaledPage.canvas.width() / scaledPage.scale) / 3.8;
 	

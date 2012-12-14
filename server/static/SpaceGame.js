@@ -249,7 +249,6 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 			this.pointed.handled = true;
 		}
 	}
-<<<<<<< HEAD
     else if(this.currentStatus.statusType === 'deployShipView'){
         var newCoords = this.battlefield.getFieldCoords(rx / this.currentStatus.scale, ry / this.currentStatus.scale);
         var shipName = this.actions.deploy;
@@ -269,7 +268,7 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
     }
     if(this.currentStatus.statusType === 'shipTarget'){
         alert("attackin!");
-=======
+    }
     if(this.currentStatus.statusType === 'attackView'){
 		for(var i = 0; i < this.currentStatus.buttonList.length; i++)
 		{
@@ -278,7 +277,6 @@ SpaceGame.prototype.actionCheck = function(rx, ry){
 				this.actions.attack = this.actions.active.ship.atkList[i];
 			}
 		}
->>>>>>> fc0d8b3984ef88961923f3ea5eb7470a0651d2e6
     }
 	if(this.currentStatus.statusType === 'targetView'){
 		var atkCoords = this.battlefield.getFieldCoords(rx / this.currentStatus.scale, ry / this.currentStatus.scale);
